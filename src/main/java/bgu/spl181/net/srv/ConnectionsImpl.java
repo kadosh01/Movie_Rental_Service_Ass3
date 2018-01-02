@@ -9,18 +9,21 @@ import java.util.Map;
 
 
 public class ConnectionsImpl<T> implements Connections<T> {
+
     private HashMap<Integer, ConnectionHandler<T>> _connectionsMap;
+
     @Override
     public boolean send(int connectionId, T msg) {
-        if(!_connectionsMap.containsKey(connectionId)){return false;}
+        if(!_connectionsMap.containsKey(connectionId)){
+            return false;
+        }
         _connectionsMap.get(connectionId).send(msg);
         return true;
     }
 
     @Override
     public void broadcast(T msg) {
-        for(Map.Entry<Integer,ConnectionHandler<T>> handler : _connectionsMap.entrySet())
-        {
+        for(Map.Entry<Integer,ConnectionHandler<T>> handler : _connectionsMap.entrySet()){
             handler.getValue().send(msg);
         }
     }
