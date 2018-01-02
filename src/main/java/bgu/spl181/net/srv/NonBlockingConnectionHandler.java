@@ -2,6 +2,7 @@ package bgu.spl181.net.srv;
 
 import bgu.spl181.net.api.MessageEncoderDecoder;
 import bgu.spl181.net.api.MessagingProtocol;
+import bgu.spl181.net.srv.bidi.ConnectionHandler;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
