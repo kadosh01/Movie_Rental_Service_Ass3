@@ -2,7 +2,9 @@ package bgu.spl181.net.srv;
 
 import bgu.spl181.net.api.bidi.Connections;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class ConnectionsImpl<T> implements Connections<T> {
@@ -16,11 +18,20 @@ public class ConnectionsImpl<T> implements Connections<T> {
 
     @Override
     public void broadcast(T msg) {
-
+        for(Map.Entry<Integer,ConnectionHandler<T>> handler : _connectionsMap.entrySet())
+        {
+            handler.getValue().send(msg);
+        }
     }
 
     @Override
     public void disconnect(int connectionId) {
+        try {
+            _connectionsMap.get(connectionId).close();
+            _connectionsMap.remove(connectionId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 }
