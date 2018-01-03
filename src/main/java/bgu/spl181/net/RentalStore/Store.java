@@ -1,3 +1,5 @@
+package bgu.spl181.net.RentalStore;
+
 import java.util.HashMap;
 import java.util.List;
 

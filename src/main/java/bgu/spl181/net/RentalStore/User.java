@@ -1,3 +1,5 @@
+package bgu.spl181.net.RentalStore;
+
 import java.util.List;
 
 public class User {
