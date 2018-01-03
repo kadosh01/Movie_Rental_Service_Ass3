@@ -113,7 +113,7 @@ public class Reactor<T> implements Server<T> {
             }
         }
 
-	    if (key.isValid() && key.isWritable()) {
+	    if (key.isValid() && key.isWritable()) {//why not pool.submit?
             handler.continueWrite();
         }
     }
