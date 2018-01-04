@@ -14,8 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ConnectionsImpl<T> implements Connections<T> {
 
     private ConcurrentHashMap<Integer, ConnectionHandler<T>> _connectionsMap= new ConcurrentHashMap<>();
-    private ConcurrentHashMap<String, Integer> _loggedInUsers= new ConcurrentHashMap<>();
-    //private
 
     @Override
     public boolean send(int connectionId, T msg) {
@@ -44,9 +42,4 @@ public class ConnectionsImpl<T> implements Connections<T> {
 
     }
 
-    public boolean isConnected(int id){
-        if(_connectionsMap.containsKey(id))
-            return true;
-        return false;
-    }
 }
