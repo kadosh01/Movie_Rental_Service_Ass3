@@ -1,20 +1,27 @@
 package bgu.spl181.net.RentalStore;
 
+import com.google.gson.annotations.SerializedName;
+import com.sun.xml.internal.ws.developer.Serialization;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class Movie {
-
+public class Movie implements Serializable {
     private String _name,_id;
     private int _price,_availableAmount,_totalAmount;
-    private List<String> _bannedCategories;
+    private List<String> _bannedCountries;
 
-    public Movie(String name, int price , String id, List<String> bannedCategories ,int availableAmount,int totalAmount){
+    public Movie(String name, int price , String id, List<String> bannedCountries ,int availableAmount,int totalAmount){
         _availableAmount=availableAmount;
-        _bannedCategories=bannedCategories;
+        _bannedCountries=bannedCountries;
         _id=id;
         _name=name;
         _price=price;
         _totalAmount=totalAmount;
+    }
+    public Movie(String name, String id){
+        _id=id;
+        _name=name;
     }
 
     public String get_name() {
@@ -58,10 +65,10 @@ public class Movie {
     }
 
     public List<String> get_bannedCategories() {
-        return _bannedCategories;
+        return _bannedCountries;
     }
 
     public void set_bannedCategories(List<String> _bannedCategories) {
-        this._bannedCategories = _bannedCategories;
+        this._bannedCountries = _bannedCategories;
     }
 }

@@ -1,8 +1,9 @@
 package bgu.spl181.net.RentalStore;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class User {
+public class User implements Serializable {
 
     private String _username;
     private String _password;
