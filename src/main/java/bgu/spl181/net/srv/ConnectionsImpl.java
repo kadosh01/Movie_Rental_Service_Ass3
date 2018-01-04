@@ -1,16 +1,21 @@
 package bgu.spl181.net.srv;
 
+import bgu.spl181.net.RentalStore.User;
 import bgu.spl181.net.api.bidi.Connections;
 import bgu.spl181.net.srv.bidi.ConnectionHandler;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class ConnectionsImpl<T> implements Connections<T> {
 
-    private HashMap<Integer, ConnectionHandler<T>> _connectionsMap;
+    private ConcurrentHashMap<Integer, ConnectionHandler<T>> _connectionsMap= new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Integer> _loggedInUsers= new ConcurrentHashMap<>();
+    //private
 
     @Override
     public boolean send(int connectionId, T msg) {
@@ -37,5 +42,11 @@ public class ConnectionsImpl<T> implements Connections<T> {
             e.printStackTrace();
         }
 
+    }
+
+    public boolean isConnected(int id){
+        if(_connectionsMap.containsKey(id))
+            return true;
+        return false;
     }
 }
