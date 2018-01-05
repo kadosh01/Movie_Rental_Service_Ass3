@@ -45,6 +45,7 @@ public class RentMovie extends Request{
             user.set_balance(user.get_balance()-mov.get_price());
             ACKCommand ack= new ACKCommand("rent "+_movieName+" success");
             _connections.send(_connectionId, ack.getACK());
+            //add broadcast!!!
         }
         else{
             ERRORCommand err= new ERRORCommand("no more copies available");

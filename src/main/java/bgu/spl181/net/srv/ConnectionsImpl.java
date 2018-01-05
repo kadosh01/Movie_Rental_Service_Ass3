@@ -15,9 +15,7 @@ public class ConnectionsImpl<T> implements Connections<T> {
 
     private ConcurrentHashMap<Integer, ConnectionHandler<T>> _connectionsMap= new ConcurrentHashMap<>();
     private Database _database;
-    /*public ConnectionsImpl(Database database){
-        _database=database;
-    }*/
+
     @Override
     public boolean send(int connectionId, T msg) {
         if(!_connectionsMap.containsKey(connectionId)){
