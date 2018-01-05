@@ -27,6 +27,7 @@ public class ConnectionsImpl<T> implements Connections<T> {
     @Override
     public void broadcast(T msg) {
         for(Map.Entry<Integer,ConnectionHandler<T>> handler : _connectionsMap.entrySet()){
+            //if(handler)
             handler.getValue().send(msg);
         }
     }
