@@ -17,6 +17,8 @@ public class BalanceInfo extends Request {
 
     @Override
     protected void execute() {
-        //_database.getUserByConnectionId()
+        int balance=_database.getUserByConnectionId(_connectionid).get_balance();
+        ACKCommand ACK=new ACKCommand("balance " +balance);
+        _connections.send(_connectionid,ACK.getACK());
     }
 }
