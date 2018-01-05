@@ -3,6 +3,7 @@ package bgu.spl181.net.srv;
 import bgu.spl181.net.RentalStore.User;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public interface Database {
     /**
@@ -12,9 +13,14 @@ public interface Database {
      *
      * @return a Hashmap where the key is user username and the value is user password.
      */
-    public HashMap<String, String> getUsersData();
+    public ConcurrentHashMap<String, Users> getUsers();
 
-    public boolean isLogged(String userName);
-    public void setLogIn(String userName);
-    public void setLogOut(String userName);
+    public void addUser(Users user);
+
+    public ConcurrentHashMap<Integer, Users> getLoggedUsers();
+
+    public void addLoggedUser(Integer id, String username);
+
+    public void removeLoggedUser(Integer id);
+
 }

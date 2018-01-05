@@ -2,14 +2,16 @@ package bgu.spl181.net.srv;
 
 import bgu.spl181.net.api.bidi.BidiMessagingProtocol;
 import bgu.spl181.net.api.bidi.Connections;
+import bgu.spl181.net.srv.Commands.ACKCommand;
 import bgu.spl181.net.srv.Commands.ERRORCommand;
 
-public abstract class UserServiceTextBasedProtocol<String> implements BidiMessagingProtocol<String> {
+public abstract class UserServiceTextBasedProtocol implements BidiMessagingProtocol<String> {
     protected Connections _connections;
     protected boolean _shouldTerminate= false;
     protected boolean _clientLoggedIn= false;
     protected int _connectionId;
     protected Database _database;
+    protected String _username;
 
     public UserServiceTextBasedProtocol(Database database){
         _database=database;
@@ -23,56 +25,61 @@ public abstract class UserServiceTextBasedProtocol<String> implements BidiMessag
 
     @Override
     public void process(String message){
-        java.lang.String[] split= ((java.lang.String)message).split(" ");
+        String[] split= message.split(" ");
         switch (split[0]){
             case "REGISTER": {
-                /*
-                if (_loggedIn) {
-                    ERRORCommand err = new ERRORCommand("REGISTER failed, client already logged in");
+                Register(message);
+                break;
+            }
+            case "LOGIN": {
+                if (_clientLoggedIn) {
+                    ERRORCommand err = new ERRORCommand("LOGIN failed, client is already logged in");
                     _connections.send(_connectionId, err.getError());
                     return;
                 }
                 if (split.length < 3) {
-                    ERRORCommand err = new ERRORCommand("REGISTER failed, username or password missing");
+                    ERRORCommand err = new ERRORCommand("LOGIN failed, username or password doesn't exist");
                     _connections.send(_connectionId, err.getError());
                     return;
                 }
                 String username = (String) split[1];
                 String password = (String) split[2];
-                */
-                Register();
+
+                if (_database.getUsers().get(username).isLoggedIn()) {
+                    ERRORCommand err = new ERRORCommand("LOGIN failed, user is already logged in");
+                    _connections.send(_connectionId, err.getError());
+                    return;
+                }
+                if (!_database.getUsers().contains(username) || !_database.getUsers().get(username).getPassword().equals(password)) {
+                    ERRORCommand err = new ERRORCommand("LOGIN failed, username or password doesn't exist");
+                    _connections.send(_connectionId, err.getError());
+                    return;
+                }
+                _clientLoggedIn = true;
+                _database.addLoggedUser(_connectionId, username);
+                ACKCommand ack= new ACKCommand("LOGIN succeeded");
+                _connections.send(_connectionId, ack.getACK());
                 break;
             }
-            case "LOGIN":
-                if(_clientLoggedIn){
-                    ERRORCommand err= new ERRORCommand("LOGIN failed, user already logged in");
+            case "SIGNOUT": {
+                if(!_clientLoggedIn){
+                    ERRORCommand err = new ERRORCommand("SIGNOUT failed, client not logged in");
                     _connections.send(_connectionId, err.getError());
                     return;
                 }
-                if (split.length < 3) {
-                    ERRORCommand err= new ERRORCommand("LOGIN failed, username or password doesn't exist");
-                    _connections.send(_connectionId, err.getError());
-                    return;
-                }
-                String username= (String) split[1];
-                String password= (String) split[2];
-
-              //  if(_database.isLogged(username)){
-
-                }
-
-
-                _clientLoggedIn= true;
+                _clientLoggedIn = false;
+                _database.removeLoggedUser(_connectionId);
+                ACKCommand ack= new ACKCommand("SIGNOUT succeeded");
+                _connections.send(_connectionId, ack.getACK());
                 break;
-            case "SIGNOUT":
-                _clientLoggedIn= false;
-                break;
+            }
         }
     }
 
-    protected abstract void Register();
+    protected abstract void Register(String msg);
+
     @Override
-    public boolean shouldTerminate() {
+    public boolean shouldTerminate() {//when does it change to true??
         return _shouldTerminate;
     }
 }

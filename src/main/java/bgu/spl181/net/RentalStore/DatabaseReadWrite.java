@@ -1,6 +1,7 @@
 package bgu.spl181.net.RentalStore;
 
 import bgu.spl181.net.srv.Database;
+import bgu.spl181.net.srv.Users;
 import com.fasterxml.jackson.databind.util.Converter;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -24,13 +25,14 @@ public class DatabaseReadWrite implements Database{
     private final String USERS_PATH="/home/kadoshy/Downloads/spl-net/Movie_Rental_Service_Ass3/Database/example_Users.json";
     private Gson gson;
     private ConcurrentHashMap<String,Movie> _movies; //<id,Movie>
-    private ConcurrentHashMap<String,User> _users; //<username,User>
-    private ConcurrentHashMap<String,AtomicBoolean> _loggedUsers;
+    private ConcurrentHashMap<String,Users> _users; //<username,User>
+    private ConcurrentHashMap<Integer, Users> _loggedUsers;
 
     public DatabaseReadWrite(){
         gson=new Gson();
         _movies=new ConcurrentHashMap<>();
         _users=new ConcurrentHashMap<>();
+        _loggedUsers= new ConcurrentHashMap<>();
     }
 
     public void DesrializeMovies(){
@@ -84,9 +86,39 @@ public class DatabaseReadWrite implements Database{
     }
 
     public ConcurrentHashMap<String,Movie> getMovies(){return _movies;}
-    public ConcurrentHashMap<String,User> getUsers(){return _users;}
+
     public boolean UpdateMoviesFile(){return true;}
 
+    @Override
+    public ConcurrentHashMap<String, Users> getUsers() {
+        return _users;
+    }
+
+    @Override
+    public void addUser(Users user) {
+        _users.putIfAbsent(user.getUsername(), user);
+    }
+
+    @Override
+    public ConcurrentHashMap<Integer, Users> getLoggedUsers() {
+        return _loggedUsers;
+    }
+
+    @Override
+    public void addLoggedUser(Integer id, String username) {
+        _users.get(username).setLoggedIn(true);
+        _loggedUsers.putIfAbsent(id, _users.get(username));
+    }
+
+    @Override
+    public void removeLoggedUser(Integer id) {
+        _users.get(_loggedUsers.get(id)).setLoggedIn(false);
+        _loggedUsers.remove(id);
+    }
+
+
+
+    /*
     @Override
     public HashMap<String, String> getUsersData() {
         HashMap<String,String> ans=new HashMap<>();
@@ -96,6 +128,7 @@ public class DatabaseReadWrite implements Database{
         return ans;
 
     }
+
 
     @Override
     public boolean isLogged(String userName) {
@@ -110,5 +143,5 @@ public class DatabaseReadWrite implements Database{
     @Override
     public void setLogOut(String userName) {
         while (!_loggedUsers.get(userName).compareAndSet(true,false));
-    }
+    }*/
 }
