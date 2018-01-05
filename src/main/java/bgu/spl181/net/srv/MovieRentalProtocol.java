@@ -14,6 +14,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
     public MovieRentalProtocol(DatabaseReadWrite database) {
         super(database);
         _database=database;
+        ((ConnectionsImpl)_connections).set_database(_database);
     }
 
     public void process(String message) {
@@ -94,6 +95,13 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                         String movie= split[2];
                         req= new ReturnMovie(_connections, _database, _connectionId, movie);
                         req.execute();
+                    }
+                    case "addmovie":{
+                        if(split.length<3){//movie name missing
+                            ERRORCommand err= new ERRORCommand("REQUEST failed, movie name required");
+                            _connections.send(_connectionId, err.getError());
+                            return;
+                        }
                     }
                 }
 

@@ -72,11 +72,6 @@ public class Movie implements Serializable {
         this._bannedCountries = _bannedCountries;
     }
 
-    public Movie clone(){
-        Movie copy= new Movie(_name, _price, _id, _bannedCountries, _availableAmount, _totalAmount);
-        return copy;
-    }
-
     /*
     @Override
     public String toString() {
