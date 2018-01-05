@@ -5,11 +5,11 @@ import bgu.spl181.net.RentalStore.Movie;
 import bgu.spl181.net.RentalStore.User;
 import bgu.spl181.net.api.bidi.Connections;
 
-public class rentMovie extends Request{
+public class RentMovie extends Request{
 
     private String _movieName;
 
-    public rentMovie(Connections connections, DatabaseReadWrite database, int connectionId, String movieName) {
+    public RentMovie(Connections connections, DatabaseReadWrite database, int connectionId, String movieName) {
         super(connections, database, connectionId);
         _movieName= movieName;
     }

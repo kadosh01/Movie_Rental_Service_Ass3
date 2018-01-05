@@ -48,6 +48,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                         String request= split[1]+split[2];
                         if(request.equals("balance info")){
                             req= new BalanceInfo(_connections,_database,_connectionId);
+                            req.execute();
                         }
                         else if(request.equals("balance add")){
                             if(split.length<4){//amount missing
@@ -57,6 +58,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                             }
                             int amount= Integer.parseInt(split[3]);
                             req= new BalanceAdd(_connections, _database, _connectionId, amount);
+                            req.execute();
                         }
                         break;
                     }
@@ -64,9 +66,11 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                         if(split.length>2){//asking info about a specific movie
                             String movie= split[2];
                             req= new MoviesInfo(_connections, _database, _connectionId, movie);
+                            req.execute();
                         }
                         else{//asking info about all the movies in the database
                             req= new MoviesInfo(_connections, _database, _connectionId);
+                            req.execute();
                         }
                         break;
                     }
@@ -77,7 +81,8 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                             return;
                         }
                         String movie= split[2];
-                        //create rent movie request
+                        req= new RentMovie(_connections, _database, _connectionId, movie);
+                        req.execute();
                         break;
                     }
                     case "return":{
@@ -87,10 +92,11 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                             return;
                         }
                         String movie= split[2];
-                        //create return movie request
+                        req= new ReturnMovie(_connections, _database, _connectionId, movie);
+                        req.execute();
                     }
                 }
-                //req.execute();
+
             }
             default:
         }
