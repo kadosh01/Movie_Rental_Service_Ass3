@@ -7,12 +7,14 @@ import bgu.spl181.net.srv.Database;
 public abstract class Request {
 
     protected Connections _connections;
+    protected int _connectionId;
     protected DatabaseReadWrite _database;
 
-    public Request(Connections connections, DatabaseReadWrite database){
+    public Request(Connections connections, DatabaseReadWrite database, int connectionId){
         _connections= connections;
         _database= database;
+        _connectionId= connectionId;
     }
 
-    protected abstract void execute();
+    public abstract void execute();
 }

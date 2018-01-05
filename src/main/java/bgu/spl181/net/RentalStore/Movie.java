@@ -1,11 +1,9 @@
 package bgu.spl181.net.RentalStore;
 
 import com.google.gson.annotations.SerializedName;
-import com.sun.org.apache.xpath.internal.operations.Equals;
 import com.sun.xml.internal.ws.developer.Serialization;
 
 import java.io.Serializable;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Movie implements Serializable {
@@ -72,10 +70,5 @@ public class Movie implements Serializable {
 
     public void set_bannedCountries(List<String> _bannedCountries) {
         this._bannedCountries = _bannedCountries;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return ((Movie)obj)._id.equals(_id);
     }
 }
