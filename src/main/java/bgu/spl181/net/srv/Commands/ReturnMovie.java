@@ -28,6 +28,10 @@ public class ReturnMovie extends Request{
             _connections.send(_connectionId, err.getError());
             return;
         }
+        user.get_rentedMovies().remove(_movieName);
+        _database.increaseAvailableCopies(_movieName);
+        ACKCommand ack= new ACKCommand("return "+_movieName+" success");
+        _connections.send(_connectionId, ack.getACK());
 
     }
 }

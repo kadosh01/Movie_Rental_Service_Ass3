@@ -226,6 +226,13 @@ public class DatabaseReadWrite implements Database{
         return out;
     }
 
+    public void increaseAvailableCopies(String movieName){
+        _movieLock.writeLock().lock();
+        Movie mov= _movies.get(movieName);
+        mov.set_availableAmount(mov.get_availableAmount()+1);
+        _movieLock.writeLock().unlock();
+    }
+
     /*
     @Override
     public HashMap<String, String> getUsersData() {
