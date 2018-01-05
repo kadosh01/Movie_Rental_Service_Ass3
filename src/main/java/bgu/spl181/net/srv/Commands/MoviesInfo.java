@@ -19,7 +19,7 @@ public class MoviesInfo extends Request{
 
     @Override
     public void execute() {
-        String msg="";
+        String msg;
         if(_movieName.length()>0){
             if(!_database.getMovies().containsKey(_movieName)){
                 ERRORCommand err= new ERRORCommand("movie doesn't exist");
