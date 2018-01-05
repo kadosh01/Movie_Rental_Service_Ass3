@@ -16,12 +16,12 @@ public class RentMovie extends Request{
 
     @Override
     public void execute() {
-        if(!_database.getMovies().containsKey(_movieName)){
+        if(!_database.getMovies().containsKey(_movieName)){//synchronize???
             ERRORCommand err= new ERRORCommand("movie doesn't exist");
             _connections.send(_connectionId, err.getError());
             return;
         }
-        Movie mov= _database.getMovies().get(_movieName);
+        Movie mov= _database.getMovie(_movieName);
         User user= _database.getUserByConnectionId(_connectionId);
         if(user.get_rentedMovies().contains(mov)){//make sure all movies are the same instances
             ERRORCommand err= new ERRORCommand("user is already renting the movie");
