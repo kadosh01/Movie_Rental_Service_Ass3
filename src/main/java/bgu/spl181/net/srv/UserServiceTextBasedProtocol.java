@@ -11,7 +11,6 @@ public abstract class UserServiceTextBasedProtocol implements BidiMessagingProto
     protected boolean _clientLoggedIn= false;
     protected int _connectionId;
     protected Database _database;
-    protected String _username;
 
     public UserServiceTextBasedProtocol(Database database){
         _database=database;

@@ -4,6 +4,7 @@ import bgu.spl181.net.RentalStore.DatabaseReadWrite;
 import bgu.spl181.net.RentalStore.User;
 import bgu.spl181.net.srv.Commands.ACKCommand;
 import bgu.spl181.net.srv.Commands.ERRORCommand;
+import bgu.spl181.net.srv.Commands.Request;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -33,7 +34,59 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                 super.process(message);
                 break;
             }
+            case "REQUEST":{
+                Request req;
+                if(split.length<2){
+                    ERRORCommand err= new ERRORCommand("request doesn't exist");
+                    _connections.send(_connectionId, err.getError());
+                    return;
+                }
+                switch (split[1]){
+                    case "balance":{
+                        String request= split[1]+split[2];
+                        if(request.equals("balance info")){
 
+                        }
+                        else if(request.equals("balance add")){
+                            if(split.length<4){//amount missing
+                                ERRORCommand err= new ERRORCommand("REQUEST failed, amount required");
+                                _connections.send(_connectionId, err.getError());
+                                return;
+                            }
+                            int amount= Integer.parseInt(split[3]);
+                            //create request
+                        }
+                    }
+                    case "info":{
+                        if(split.length>2){//asking info about a specific movie
+                            String movie= split[2];
+                            //create movie info request
+                        }
+                        else{//asking info about all the movies in the database
+                            //create all movies info request
+                        }
+                    }
+                    case "rent":{
+                        if(split.length<3){//movie name missing
+                            ERRORCommand err= new ERRORCommand("REQUEST failed, movie name required");
+                            _connections.send(_connectionId, err.getError());
+                            return;
+                        }
+                        String movie= split[2];
+                        //create rent movie request
+                    }
+                    case "return":{
+                        if(split.length<3){//movie name missing
+                            ERRORCommand err= new ERRORCommand("REQUEST failed, movie name required");
+                            _connections.send(_connectionId, err.getError());
+                            return;
+                        }
+                        String movie= split[2];
+                        //create return movie request
+                    }
+                }
+            }
+            default:
         }
     }
 

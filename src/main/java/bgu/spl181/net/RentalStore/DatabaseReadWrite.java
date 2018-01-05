@@ -95,7 +95,7 @@ public class DatabaseReadWrite implements Database{
     }
 
     @Override
-    public void addUser(Users user) {
+    public void addUser(Users user) {//update json file
         _users.putIfAbsent(user.getUsername(), user);
     }
 
