@@ -41,8 +41,8 @@ public abstract class UserServiceTextBasedProtocol implements BidiMessagingProto
                     _connections.send(_connectionId, err.getError());
                     return;
                 }
-                String username = (String) split[1];
-                String password = (String) split[2];
+                String username = split[1];
+                String password = split[2];
 
                 if (_database.getUsers().get(username).isLoggedIn()) {
                     ERRORCommand err = new ERRORCommand("LOGIN failed, user is already logged in");

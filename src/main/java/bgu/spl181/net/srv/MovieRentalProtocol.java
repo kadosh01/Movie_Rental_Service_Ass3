@@ -36,6 +36,11 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
             }
             case "REQUEST":{
                 Request req;
+                if(!_clientLoggedIn){
+                    ERRORCommand err= new ERRORCommand("client isn't logged in");
+                    _connections.send(_connectionId, err.getError());
+                    return;
+                }
                 if(split.length<2){
                     ERRORCommand err= new ERRORCommand("request doesn't exist");
                     _connections.send(_connectionId, err.getError());
