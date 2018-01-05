@@ -64,11 +64,11 @@ public class Movie implements Serializable {
         this._totalAmount = _totalAmount;
     }
 
-    public List<String> get_bannedCategories() {
+    public List<String> get_bannedCountries() {
         return _bannedCountries;
     }
 
-    public void set_bannedCategories(List<String> _bannedCategories) {
-        this._bannedCountries = _bannedCategories;
+    public void set_bannedCountries(List<String> _bannedCountries) {
+        this._bannedCountries = _bannedCountries;
     }
 }

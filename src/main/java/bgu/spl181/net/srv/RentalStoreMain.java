@@ -1,7 +1,11 @@
 package bgu.spl181.net.srv;
 import java.io.File;
 import java.lang.Throwable;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import bgu.spl181.net.RentalStore.DatabaseReadWrite;
 import bgu.spl181.net.RentalStore.Movie;
@@ -16,8 +20,10 @@ public class RentalStoreMain {
         public static void main(String[] args) {
 
             DatabaseReadWrite d=new DatabaseReadWrite();
-            d.DesrializeMovies();
-            d.DesrializeUsers();
+            d.DeserializeUsers();
+            d.SerializedUser();
+            //List<Movie> w=d.
+            //d.DeserializeUsers();
             // NewsFeed feed = new NewsFeed(); //one shared object
 
 // you can use any server...

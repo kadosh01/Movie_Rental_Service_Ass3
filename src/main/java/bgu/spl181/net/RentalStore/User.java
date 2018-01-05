@@ -23,7 +23,6 @@ public class User implements Serializable, Users {
         _rentedMovies= rentedMovies;
         _balance= balance;
         _loggedIn= false;
-
     }
 
 
