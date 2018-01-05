@@ -209,6 +209,22 @@ public class DatabaseReadWrite implements Database{
         return canRent;
     }
 
+    public Movie getMovie(String movieName){
+        _movieLock.readLock().lock();
+        Movie ret= _movies.get(movieName).clone();
+        _movieLock.readLock().unlock();
+        return ret;
+    }
+
+    public String getMoviesNames(){
+        String out="";
+        _movieLock.readLock().lock();
+        for(String movie: _movies.keySet()){
+            out=out+movie+" ";
+        }
+        _movieLock.readLock().unlock();
+        return out;
+    }
 
     /*
     @Override

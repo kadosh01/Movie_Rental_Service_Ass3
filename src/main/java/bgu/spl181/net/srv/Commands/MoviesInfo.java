@@ -19,23 +19,21 @@ public class MoviesInfo extends Request{
 
     @Override
     public void execute() {
-        String msg="";
+        String msg;
         if(_movieName.length()>0){
             if(!_database.getMovies().containsKey(_movieName)){
                 ERRORCommand err= new ERRORCommand("movie doesn't exist");
                 _connections.send(_connectionId, err.getError());
                 return;
             }
-            Movie mov= _database.getMovies().get(_movieName);
+            Movie mov= _database.getMovie(_movieName);
             msg= "info "+_movieName+" "+mov.get_availableAmount()+" "+mov.get_price();
             for(String country: mov.get_bannedCountries()){
                 msg= msg+" "+country;
             }
         }
         else{
-            for(String mov: _database.getMovies().keySet()){
-                msg= msg+ mov+" ";
-            }
+            msg= _database.getMoviesNames();
         }
         ACKCommand ack= new ACKCommand(msg);
         _connections.send(_connectionId, ack.getACK());
