@@ -30,7 +30,8 @@ public class DatabaseReadWrite implements Database{
     private ConcurrentHashMap<String,Movie> _movies; //<id,Movie>
     private ConcurrentHashMap<String,Users> _users; //<username,User>
     private ConcurrentHashMap<Integer, Users> _loggedUsers;
-    private ReadWriteLock _readWriteLock;
+    private ReadWriteLock _userLock;
+    private ReadWriteLock _movieLock;
     private ConcurrentLinkedQueue<Runnable> _ReadWriteJsonQueue;
 
     public DatabaseReadWrite(){
@@ -38,7 +39,8 @@ public class DatabaseReadWrite implements Database{
         _movies=new ConcurrentHashMap<>();
         _users=new ConcurrentHashMap<>();
         _loggedUsers= new ConcurrentHashMap<>();
-        _readWriteLock=new ReentrantReadWriteLock();
+        _userLock=new ReentrantReadWriteLock();
+        _movieLock= new ReentrantReadWriteLock();
         _ReadWriteJsonQueue=new ConcurrentLinkedQueue<>();
     }
 
@@ -149,9 +151,11 @@ public class DatabaseReadWrite implements Database{
         }
     }
 
-    public ConcurrentHashMap<String,Movie> getMovies(){return _movies;}
+    public ConcurrentHashMap<String,Movie> getMovies(){//add lock??
+        return _movies;
+    }
 
-    public boolean UpdateUserFile(){return true;}
+    public boolean updateUserFile(){return true;}
 
     @Override
     public ConcurrentHashMap<String, Users> getUsers() {
@@ -159,15 +163,15 @@ public class DatabaseReadWrite implements Database{
     }
 
     @Override
-    public void addUser(Users user) {
-        _readWriteLock.writeLock().lock();
+    public void addUser(Users user) {//lock function?
+        //_readWriteLock.writeLock().lock();
         _users.putIfAbsent(user.getUsername(), user);
-        _readWriteLock.writeLock().unlock();
+        //_readWriteLock.writeLock().unlock();
 
         _ReadWriteJsonQueue.add(()->{
-            _readWriteLock.readLock().lock();
+            _userLock.readLock().lock();
             SerializedUser();
-            _readWriteLock.readLock().unlock();
+            _userLock.readLock().unlock();
         });
     }
 
@@ -192,6 +196,17 @@ public class DatabaseReadWrite implements Database{
     public User getUserByConnectionId(Integer connectionId){
 
         return (User)_loggedUsers.get(connectionId);
+    }
+
+    public boolean tryRentMovie(String movieName){
+        _movieLock.readLock().lock();
+        Movie mov= _movies.get(movieName);
+        boolean canRent= mov.get_availableAmount()>0;
+        if(canRent){
+            mov.set_availableAmount(mov.get_availableAmount()-1);
+        }
+        _movieLock.readLock().unlock();
+        return canRent;
     }
 
 

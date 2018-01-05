@@ -71,4 +71,14 @@ public class Movie implements Serializable {
     public void set_bannedCountries(List<String> _bannedCountries) {
         this._bannedCountries = _bannedCountries;
     }
+
+    /*
+    @Override
+    public String toString() {
+        String ret= _name+" "+_availableAmount+" "+_price;
+        for(String country: _bannedCountries){
+            ret= ret+" "+country;
+        }
+        return ret;
+    }*/
 }

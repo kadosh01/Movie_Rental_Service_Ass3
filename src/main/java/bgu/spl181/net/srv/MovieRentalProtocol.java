@@ -2,10 +2,7 @@ package bgu.spl181.net.srv;
 
 import bgu.spl181.net.RentalStore.DatabaseReadWrite;
 import bgu.spl181.net.RentalStore.User;
-import bgu.spl181.net.srv.Commands.ACKCommand;
-import bgu.spl181.net.srv.Commands.BalanceInfo;
-import bgu.spl181.net.srv.Commands.ERRORCommand;
-import bgu.spl181.net.srv.Commands.Request;
+import bgu.spl181.net.srv.Commands.*;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -50,8 +47,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                     case "balance":{
                         String request= split[1]+split[2];
                         if(request.equals("balance info")){
-                            BalanceInfo info=new BalanceInfo(_connections,_database,_connectionId);
-                            return;
+                            req= new BalanceInfo(_connections,_database,_connectionId);
                         }
                         else if(request.equals("balance add")){
                             if(split.length<4){//amount missing
@@ -60,17 +56,19 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                                 return;
                             }
                             int amount= Integer.parseInt(split[3]);
-                            //create request
+                            req= new BalanceAdd(_connections, _database, _connectionId, amount);
                         }
+                        break;
                     }
                     case "info":{
                         if(split.length>2){//asking info about a specific movie
                             String movie= split[2];
-                            //create movie info request
+                            req= new MoviesInfo(_connections, _database, _connectionId, movie);
                         }
                         else{//asking info about all the movies in the database
-                            //create all movies info request
+                            req= new MoviesInfo(_connections, _database, _connectionId);
                         }
+                        break;
                     }
                     case "rent":{
                         if(split.length<3){//movie name missing
@@ -80,6 +78,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                         }
                         String movie= split[2];
                         //create rent movie request
+                        break;
                     }
                     case "return":{
                         if(split.length<3){//movie name missing
@@ -91,6 +90,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                         //create return movie request
                     }
                 }
+                //req.execute();
             }
             default:
         }

@@ -9,16 +9,14 @@ import bgu.spl181.net.srv.Database;
  */
 public class BalanceInfo extends Request {
 
-    private int _connectionid;
     public BalanceInfo(Connections connections, DatabaseReadWrite database, int connectionId) {
-        super(connections, database);
-        _connectionid=connectionId;
+        super(connections, database, connectionId);
     }
 
     @Override
-    protected void execute() {
-        int balance=_database.getUserByConnectionId(_connectionid).get_balance();
+    public void execute() {
+        int balance=_database.getUserByConnectionId(_connectionId).get_balance();
         ACKCommand ACK=new ACKCommand("balance " +balance);
-        _connections.send(_connectionid,ACK.getACK());
+        _connections.send(_connectionId,ACK.getACK());
     }
 }

@@ -20,8 +20,17 @@ public class RentalStoreMain {
         public static void main(String[] args) {
 
             DatabaseReadWrite d=new DatabaseReadWrite();
-            d.DeserializeUsers();
-            d.SerializedUser();
+           // d.DeserializeUsers();
+            //d.SerializedUser();
+
+            String s;
+            int i=0;
+
+            if(i>0){
+                s="aa";
+            }
+           // System.out.println(s!=null);
+
             //List<Movie> w=d.
             //d.DeserializeUsers();
             // NewsFeed feed = new NewsFeed(); //one shared object

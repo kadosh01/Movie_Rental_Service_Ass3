@@ -4,6 +4,8 @@ import bgu.spl181.net.srv.Users;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class User implements Serializable, Users {
 
@@ -12,8 +14,8 @@ public class User implements Serializable, Users {
     private String _type;
     private String _country;
     private List<Movie> _rentedMovies;
-    private int _balance;
-    private boolean _loggedIn;
+    private AtomicInteger _balance;
+    private AtomicBoolean _loggedIn;
 
     public User(String username, String type, String password, String country, List<Movie> rentedMovies, int balance){
         _username= username;
@@ -21,8 +23,8 @@ public class User implements Serializable, Users {
         _password= password;
         _country= country;
         _rentedMovies= rentedMovies;
-        _balance= balance;
-        _loggedIn= false;
+        _balance= new AtomicInteger(balance);
+        _loggedIn= new AtomicBoolean(false);
     }
 
 
@@ -51,21 +53,21 @@ public class User implements Serializable, Users {
     }
 
     public int get_balance() {
-        return _balance;
+        return _balance.get();
     }
 
-    public void set_balance(int _balance) {
-        this._balance = _balance;
+    public void set_balance(int balance) {
+        while(!_balance.compareAndSet(_balance.get(), balance));
     }
 
     @Override
     public boolean isLoggedIn() {
-        return _loggedIn;
+        return _loggedIn.get();
     }
 
     @Override
     public void setLoggedIn(boolean bool) {
-        _loggedIn= bool;
+        while(!_loggedIn.compareAndSet(_loggedIn.get(), bool));
     }
 
     @Override
@@ -77,4 +79,6 @@ public class User implements Serializable, Users {
     public String getPassword() {
         return _password;
     }
+
+
 }
