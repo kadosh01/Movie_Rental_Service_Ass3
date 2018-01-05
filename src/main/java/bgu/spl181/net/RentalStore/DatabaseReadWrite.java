@@ -178,6 +178,7 @@ public class DatabaseReadWrite implements Database{
 
     @Override
     public void addLoggedUser(Integer id, String username) {
+        //_readWriteLock.writeLock().lock();
         _users.get(username).setLoggedIn(true);
         _loggedUsers.putIfAbsent(id, _users.get(username));
     }
@@ -188,6 +189,10 @@ public class DatabaseReadWrite implements Database{
         _loggedUsers.remove(id);
     }
 
+    public User getUserByConnectionId(Integer connectionId){
+
+        return (User)_loggedUsers.get(connectionId);
+    }
 
 
     /*

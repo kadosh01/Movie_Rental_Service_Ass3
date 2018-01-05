@@ -47,7 +47,6 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                     case "balance":{
                         String request= split[1]+split[2];
                         if(request.equals("balance info")){
-
                         }
                         else if(request.equals("balance add")){
                             if(split.length<4){//amount missing
