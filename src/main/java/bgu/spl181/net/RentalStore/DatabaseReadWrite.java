@@ -151,7 +151,7 @@ public class DatabaseReadWrite implements Database{
 
     public ConcurrentHashMap<String,Movie> getMovies(){return _movies;}
 
-    public boolean UpdateMoviesFile(){return true;}
+    public boolean UpdateUserFile(){return true;}
 
     @Override
     public ConcurrentHashMap<String, Users> getUsers() {
