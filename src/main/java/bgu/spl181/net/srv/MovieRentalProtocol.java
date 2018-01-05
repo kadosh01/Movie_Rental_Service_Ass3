@@ -3,6 +3,7 @@ package bgu.spl181.net.srv;
 import bgu.spl181.net.RentalStore.DatabaseReadWrite;
 import bgu.spl181.net.RentalStore.User;
 import bgu.spl181.net.srv.Commands.ACKCommand;
+import bgu.spl181.net.srv.Commands.BalanceInfo;
 import bgu.spl181.net.srv.Commands.ERRORCommand;
 import bgu.spl181.net.srv.Commands.Request;
 
@@ -11,9 +12,11 @@ import java.util.LinkedList;
 
 public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
 
+    private DatabaseReadWrite _database;
 
     public MovieRentalProtocol(DatabaseReadWrite database) {
         super(database);
+        _database=database;
     }
 
     public void process(String message) {
@@ -47,6 +50,8 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                     case "balance":{
                         String request= split[1]+split[2];
                         if(request.equals("balance info")){
+                            BalanceInfo info=new BalanceInfo(_connections,_database,_connectionId);
+                            return;
                         }
                         else if(request.equals("balance add")){
                             if(split.length<4){//amount missing
