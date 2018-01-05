@@ -11,12 +11,9 @@ import java.util.LinkedList;
 
 public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
 
-    private HashMap<String, Boolean> _loggedInUsers= new HashMap<>();
-    private DatabaseReadWrite _database;
 
     public MovieRentalProtocol(DatabaseReadWrite database) {
         super(database);
-        _database=database;
     }
 
     public void process(String message) {
