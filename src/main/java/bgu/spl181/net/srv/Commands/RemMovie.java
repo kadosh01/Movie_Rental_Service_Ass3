@@ -39,6 +39,8 @@ public class RemMovie extends Request {
         if(_database.tryToRemove(_movie)) {
             ACKCommand success = new ACKCommand(String.format("remmovie ”movie name” success ", _movie));
             _connections.send(_connectionId,success.getACK());
+            BroadcastCommand brd= new BroadcastCommand("movie "+_movie+" removed");
+            _connections.broadcast(brd.broadcast());
         }
         else{
             ERRORCommand error=new ERRORCommand("There is (at least one) a copy of the movie that is currently rented by a user");

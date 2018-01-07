@@ -249,6 +249,9 @@ public class DatabaseReadWrite implements Database{
         _movieLock.writeLock().unlock();
         return false;
     }
+
+    public void changePrice(String movieName,int price){}
+
     public void increaseAvailableCopies(String movieName){
         _movieLock.writeLock().lock();
         Movie mov= _movies.get(movieName);
