@@ -23,7 +23,7 @@ public class Reactor<T> implements Server<T> {
     private final Supplier<MessageEncoderDecoder<T>> readerFactory;
     private final ActorThreadPool pool;
     private Selector selector;
-    private AtomicInteger _connectionIdCounte; //add this
+    private AtomicInteger _connectionIdCount; //add this
     private Connections<T> _connections; //add this
 
     private Thread selectorThread;
@@ -39,7 +39,7 @@ public class Reactor<T> implements Server<T> {
         this.port = port;
         this.protocolFactory = protocolFactory;
         this.readerFactory = readerFactory;
-        _connectionIdCounte=new AtomicInteger(0);// add this
+        _connectionIdCount=new AtomicInteger(0);// add this
         _connections=new ConnectionsImpl<>(); //add this
     }
 
@@ -104,7 +104,7 @@ public class Reactor<T> implements Server<T> {
         SocketChannel clientChan = serverChan.accept();
         clientChan.configureBlocking(false);
         BidiMessagingProtocol<T> protocol=protocolFactory.get();//add this
-        protocol.start(_connectionIdCounte.incrementAndGet(),_connections); //add this
+        protocol.start(_connectionIdCount.incrementAndGet(),_connections); //add this
         final NonBlockingConnectionHandler handler = new NonBlockingConnectionHandler(
                 readerFactory.get(),
                 protocol, //was protocolFactory.get();
