@@ -199,13 +199,13 @@ public class DatabaseReadWrite implements Database{
     }
 
     public boolean tryRentMovie(String movieName){
-        _movieLock.readLock().lock();
+        _movieLock.writeLock().lock();
         Movie mov= _movies.get(movieName);
         boolean canRent= mov.get_availableAmount()>0;
         if(canRent){
             mov.set_availableAmount(mov.get_availableAmount()-1);
         }
-        _movieLock.readLock().unlock();
+        _movieLock.writeLock().unlock();
         return canRent;
     }
 
