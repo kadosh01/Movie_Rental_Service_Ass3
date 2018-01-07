@@ -36,6 +36,8 @@ public class AddMovie extends Request {
         _database.addMovie(_movie);
         ACKCommand success=new ACKCommand(String.format("addmovie ”{0}” success",_movie.get_name()));
         _connections.send(_connectionId,success.getACK());
+        BroadcastCommand brd= new BroadcastCommand("movie "+_movie.get_name()+" "+_movie.get_availableAmount()+" "+_movie.get_price());
+        _connections.broadcast(brd.broadcast());
 
     }
 }
