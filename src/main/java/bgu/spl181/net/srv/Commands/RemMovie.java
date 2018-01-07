@@ -8,8 +8,10 @@ import bgu.spl181.net.api.bidi.Connections;
  * Created by Joseph on 07/01/2018.
  */
 public class RemMovie extends Request {
+
     private String _movie;
-    public RemMovie(Connections connections, DatabaseReadWrite database, int connectionId,String movie) {
+
+    public RemMovie(Connections connections, DatabaseReadWrite database, int connectionId, String movie) {
         super(connections, database, connectionId);
         _movie=movie;
     }

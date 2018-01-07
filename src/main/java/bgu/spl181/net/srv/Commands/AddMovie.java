@@ -8,7 +8,9 @@ import bgu.spl181.net.api.bidi.Connections;
  * Created by Joseph on 05/01/2018.
  */
 public class AddMovie extends Request {
+
     private Movie _movie;
+
     public AddMovie(Connections connections, DatabaseReadWrite database, int connectionId, Movie newmovie) {
         super(connections, database, connectionId);
         _movie=newmovie;

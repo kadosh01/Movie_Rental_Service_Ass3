@@ -3,6 +3,7 @@ package bgu.spl181.net.srv;
 import bgu.spl181.net.RentalStore.DatabaseReadWrite;
 import bgu.spl181.net.RentalStore.Movie;
 import bgu.spl181.net.RentalStore.User;
+import bgu.spl181.net.api.bidi.Connections;
 import bgu.spl181.net.srv.Commands.*;
 
 import java.util.HashMap;
@@ -11,11 +12,15 @@ import java.util.List;
 
 public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
 
-    private DatabaseReadWrite _database;
+    public DatabaseReadWrite _database;
 
     public MovieRentalProtocol(DatabaseReadWrite database) {
         super(database);
         _database=database;
+    }
+    @Override
+    public void start(int connectionId, Connections<String> connections){
+        super.start(connectionId,connections);
         ((ConnectionsImpl)_connections).set_database(_database);
     }
 
@@ -147,6 +152,8 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                             bannedCountries.add(apSplit[i]);
                         }
                         Movie mov= new Movie(movie, price, "", bannedCountries, availableAmount, availableAmount);
+                        req= new AddMovie(_connections, _database, _connectionId, mov);
+                        req.execute();
 
                     }
                     case "remmovie":{
@@ -160,8 +167,15 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                             msg+=split[i]+" ";
                         String[] apSplit= msg.split('"'+"");
                         String movie= apSplit[0];
-
-
+                        req= new RemMovie(_connections, _database, _connectionId, movie);
+                        req.execute();
+                    }
+                    case "changeprice":{
+                        if(split.length<4){
+                            ERRORCommand err= new ERRORCommand("REQUEST failed, information missing");
+                            _connections.send(_connectionId, err.getError());
+                            return;
+                        }
                     }
                 }
 
