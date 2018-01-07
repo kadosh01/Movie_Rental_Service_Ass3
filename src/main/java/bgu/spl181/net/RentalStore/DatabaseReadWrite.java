@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -33,6 +34,7 @@ public class DatabaseReadWrite implements Database{
     private ReadWriteLock _userLock;
     private ReadWriteLock _movieLock;
     private ConcurrentLinkedQueue<Runnable> _ReadWriteJsonQueue;
+    private AtomicInteger _movieIdCounter;
 
     public DatabaseReadWrite(){
         gson=new Gson();
@@ -42,6 +44,7 @@ public class DatabaseReadWrite implements Database{
         _userLock=new ReentrantReadWriteLock();
         _movieLock= new ReentrantReadWriteLock();
         _ReadWriteJsonQueue=new ConcurrentLinkedQueue<>();
+        _movieIdCounter= new AtomicInteger(_movies.size());
     }
 
     public void DeserializeMovies(){
@@ -156,6 +159,7 @@ public class DatabaseReadWrite implements Database{
     }
 
     public boolean updateUserFile(){return true;}
+    public boolean updateMovieFile(){return true;}
 
     @Override
     public ConcurrentHashMap<String, Users> getUsers() {
@@ -215,6 +219,13 @@ public class DatabaseReadWrite implements Database{
         _movieLock.readLock().unlock();
         return ret;
     }
+    public void addMovie(Movie newmovie){
+        _movieLock.writeLock().lock();
+        newmovie.set_id(_movieIdCounter.incrementAndGet()+"");
+        _movies.put(newmovie.get_id(),newmovie);
+        updateUserFile();
+        _movieLock.writeLock().unlock();
+    }
 
     public String getMoviesNames(){
         String out="";
@@ -226,6 +237,18 @@ public class DatabaseReadWrite implements Database{
         return out;
     }
 
+    public boolean tryToRemove(String name)
+    {
+        _movieLock.writeLock().lock();
+        if(_movies.get(name).get_totalAmount()==_movies.get(name).get_availableAmount()){
+            _movies.remove(name);
+            updateMovieFile();
+            _movieLock.writeLock().unlock();
+            return true;
+        }
+        _movieLock.writeLock().unlock();
+        return false;
+    }
     public void increaseAvailableCopies(String movieName){
         _movieLock.writeLock().lock();
         Movie mov= _movies.get(movieName);

@@ -27,6 +27,15 @@ public class AddMovie extends Request {
             _connections.send(_connectionId,error.getError());
             return;
         }
+        if(_movie.get_price()<=0 || _movie.get_availableAmount()<=0)
+        {
+            ERRORCommand error=new ERRORCommand("Price or Amount are smaller than or equal to 0 (there are no free movies)");
+            _connections.send(_connectionId,error.getError());
+            return;
+        }
+        _database.addMovie(_movie);
+        ACKCommand success=new ACKCommand(String.format("addmovie ”{0}” success",_movie.get_name()));
+        _connections.send(_connectionId,success.getACK());
 
     }
 }
