@@ -32,7 +32,8 @@ public class ReturnMovie extends Request{
         _database.increaseAvailableCopies(_movieName);
         ACKCommand ack= new ACKCommand("return "+_movieName+" success");
         _connections.send(_connectionId, ack.getACK());
-        //add broadcast!!!
+        BroadcastCommand brd= new BroadcastCommand("movie "+_movieName+" "+_database.getMovie(_movieName).get_availableAmount()+" "+_database.getMovie(_movieName).get_price());
+        _connections.broadcast(brd.broadcast());
 
     }
 }

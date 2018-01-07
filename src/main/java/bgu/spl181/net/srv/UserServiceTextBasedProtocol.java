@@ -68,8 +68,10 @@ public abstract class UserServiceTextBasedProtocol implements BidiMessagingProto
                 }
                 _clientLoggedIn = false;
                 _database.removeLoggedUser(_connectionId);
+                _shouldTerminate= true;
                 ACKCommand ack= new ACKCommand("SIGNOUT succeeded");
                 _connections.send(_connectionId, ack.getACK());
+                _connections.disconnect(_connectionId); //added disconnect
                 break;
             }
         }

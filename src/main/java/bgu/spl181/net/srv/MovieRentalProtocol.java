@@ -1,11 +1,13 @@
 package bgu.spl181.net.srv;
 
 import bgu.spl181.net.RentalStore.DatabaseReadWrite;
+import bgu.spl181.net.RentalStore.Movie;
 import bgu.spl181.net.RentalStore.User;
 import bgu.spl181.net.srv.Commands.*;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
 
@@ -119,8 +121,48 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                         }
                         req= new ReturnMovie(_connections, _database, _connectionId, movie[0]);
                         req.execute();
+                        break;
                     }
-                    
+                    case "addmovie":{
+                        String msg="";
+                        if(split.length<5){
+                            ERRORCommand err= new ERRORCommand("REQUEST failed, information missing");
+                            _connections.send(_connectionId, err.getError());
+                            return;
+                        }
+                        for(int i=2;i<split.length; i++)
+                            msg+=split[i]+" ";
+                        String[] apSplit= msg.split('"'+"");
+                        String movie= apSplit[0];
+                        String[] numbers= apSplit[1].split(" ");
+                        if(numbers.length<2){
+                            ERRORCommand err= new ERRORCommand("REQUEST failed, information missing");
+                            _connections.send(_connectionId, err.getError());
+                            return;
+                        }
+                        int availableAmount= Integer.parseInt(numbers[0]);
+                        int price= Integer.parseInt(numbers[1]);
+                        List<String> bannedCountries= new LinkedList<>();
+                        for(int i=2; i<apSplit.length; i++){
+                            bannedCountries.add(apSplit[i]);
+                        }
+                        Movie mov= new Movie(movie, price, "", bannedCountries, availableAmount, availableAmount);
+
+                    }
+                    case "remmovie":{
+                        if(split.length<3){
+                            ERRORCommand err= new ERRORCommand("REQUEST failed, information missing");
+                            _connections.send(_connectionId, err.getError());
+                            return;
+                        }
+                        String msg="";
+                        for(int i=2; i<split.length; i++)
+                            msg+=split[i]+" ";
+                        String[] apSplit= msg.split('"'+"");
+                        String movie= apSplit[0];
+
+
+                    }
                 }
 
             }

@@ -23,12 +23,16 @@ public class RentalStoreMain {
            // d.DeserializeUsers();
             //d.SerializedUser();
 
-            String s;
-            int i=0;
-
-            if(i>0){
-                s="aa";
+            String s="addmovie "+'"'+"South Park"+'"'+" 30 9";
+            System.out.println(s);
+            String[] split= s.split(" ");
+            String msg="";
+            for(int i=0; i<split.length; i++){
+                //System.out.println(split[i]);
+                msg+=split[i]+" ";
             }
+            System.out.println(msg);
+
            // System.out.println(s!=null);
 
             //List<Movie> w=d.

@@ -36,13 +36,9 @@ public class ConnectionsImpl<T> implements Connections<T> {
 
     @Override
     public void disconnect(int connectionId) {
-        try {
-            _connectionsMap.get(connectionId).close();
-            _connectionsMap.remove(connectionId);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        _connectionsMap.remove(connectionId);
     }
+
     public void set_database(Database database){_database=database;}
 
 }

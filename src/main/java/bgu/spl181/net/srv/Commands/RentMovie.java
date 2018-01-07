@@ -46,7 +46,8 @@ public class RentMovie extends Request{
             user.set_balance(user.get_balance()-mov.get_price());
             ACKCommand ack= new ACKCommand("rent "+_movieName+" success");
             _connections.send(_connectionId, ack.getACK());
-            _connections.broadcast("movie "+_movieName+" "+_database.getMovie(_movieName).get_availableAmount()+" "+_database.getMovie(_movieName).get_price());
+            BroadcastCommand brd= new BroadcastCommand("movie "+_movieName+" "+_database.getMovie(_movieName).get_availableAmount()+" "+_database.getMovie(_movieName).get_price());
+            _connections.broadcast(brd.broadcast());
             //synchronize???
 
         }
