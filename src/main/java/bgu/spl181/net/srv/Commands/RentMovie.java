@@ -4,6 +4,7 @@ import bgu.spl181.net.RentalStore.DatabaseReadWrite;
 import bgu.spl181.net.RentalStore.Movie;
 import bgu.spl181.net.RentalStore.User;
 import bgu.spl181.net.api.bidi.Connections;
+import bgu.spl181.net.srv.ConnectionsImpl;
 
 public class RentMovie extends Request{
 
@@ -45,7 +46,9 @@ public class RentMovie extends Request{
             user.set_balance(user.get_balance()-mov.get_price());
             ACKCommand ack= new ACKCommand("rent "+_movieName+" success");
             _connections.send(_connectionId, ack.getACK());
-            //add broadcast!!!
+            _connections.broadcast("movie "+_movieName+" "+_database.getMovie(_movieName).get_availableAmount()+" "+_database.getMovie(_movieName).get_price());
+            //synchronize???
+
         }
         else{
             ERRORCommand err= new ERRORCommand("no more copies available");
