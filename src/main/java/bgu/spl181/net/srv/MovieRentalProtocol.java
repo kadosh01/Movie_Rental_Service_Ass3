@@ -65,8 +65,16 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                     }
                     case "info":{
                         if(split.length>2){//asking info about a specific movie
-                            String movie= split[2];
-                            req= new MoviesInfo(_connections, _database, _connectionId, movie);
+                            String msg="";
+                            for(int i=2; i<split.length; i++)
+                                msg+=split[i]+" ";
+                            String[] movie= msg.split('"'+"");
+                            if(movie.length>1){
+                                ERRORCommand err= new ERRORCommand("REQUEST failed, movie doesn't exist");
+                                _connections.send(_connectionId, err.getError());
+                                return;
+                            }
+                            req= new MoviesInfo(_connections, _database, _connectionId, movie[0]);
                             req.execute();
                         }
                         else{//asking info about all the movies in the database
@@ -81,8 +89,16 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
-                        String movie= split[2];
-                        req= new RentMovie(_connections, _database, _connectionId, movie);
+                        String msg="";
+                        for(int i=2; i<split.length; i++)
+                            msg+=split[i]+" ";
+                        String[] movie= msg.split('"'+"");
+                        if(movie.length>1){
+                            ERRORCommand err= new ERRORCommand("REQUEST failed, movie doesn't exist");
+                            _connections.send(_connectionId, err.getError());
+                            return;
+                        }
+                        req= new RentMovie(_connections, _database, _connectionId, movie[0]);
                         req.execute();
                         break;
                     }
@@ -92,17 +108,19 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
-                        String movie= split[2];
-                        req= new ReturnMovie(_connections, _database, _connectionId, movie);
-                        req.execute();
-                    }
-                    case "addmovie":{
-                        if(split.length<3){//movie name missing
-                            ERRORCommand err= new ERRORCommand("REQUEST failed, movie name required");
+                        String msg="";
+                        for(int i=2; i<split.length; i++)
+                            msg+=split[i]+" ";
+                        String[] movie= msg.split('"'+"");
+                        if(movie.length>1){
+                            ERRORCommand err= new ERRORCommand("REQUEST failed, movie doesn't exist");
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
+                        req= new ReturnMovie(_connections, _database, _connectionId, movie[0]);
+                        req.execute();
                     }
+                    
                 }
 
             }
