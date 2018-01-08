@@ -17,7 +17,7 @@ public class ChangePrice extends Request {
 
     @Override
     public void execute() {
-        if(!(((DatabaseReadWrite)_database).getUserByConnectionId(_connectionId).get_type().equals("user")))
+        if(!(((DatabaseReadWrite)_database).getUserByConnectionId(_connectionId).get_type().equals("admin")))
         {
             ERRORCommand error=new ERRORCommand("User is not an administrator");
             _connections.send(_connectionId,error.getError());

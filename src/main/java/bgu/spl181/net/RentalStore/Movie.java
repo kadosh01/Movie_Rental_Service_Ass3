@@ -76,6 +76,11 @@ public class Movie implements Serializable {
         return new Movie(_name, _price, _id, _bannedCountries, _availableAmount, _totalAmount);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return _name.equalsIgnoreCase(((Movie)o)._name);
+    }
+
     /*
     @Override
     public String toString() {

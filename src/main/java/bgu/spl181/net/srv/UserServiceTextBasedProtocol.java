@@ -44,7 +44,7 @@ public abstract class UserServiceTextBasedProtocol implements BidiMessagingProto
                 String username = split[1];
                 String password = split[2];
 
-                if (!_database.getUsers().contains(username) || !_database.getUsers().get(username).getPassword().equals(password)) {
+                if (!_database.getUsers().containsKey(username) || !_database.getUsers().get(username).getPassword().equals(password)) {
                     ERRORCommand err = new ERRORCommand("LOGIN failed, username or password doesn't exist");
                     _connections.send(_connectionId, err.getError());
                     return;

@@ -193,7 +193,7 @@ public class DatabaseReadWrite implements Database{
 
     @Override
     public void removeLoggedUser(Integer id) {
-        _users.get(_loggedUsers.get(id)).setLoggedIn(false);
+        _users.get(_loggedUsers.get(id).getUsername()).setLoggedIn(false);
         _loggedUsers.remove(id);
     }
 

@@ -35,7 +35,7 @@ public class RentMovie extends Request{
             return;
         }
         for(String country: mov.get_bannedCountries()){
-            if(country.equals(user.get_country())){
+            if(country.equalsIgnoreCase(user.get_country())){
                 ERRORCommand err= new ERRORCommand("movie is banned in user's country");
                 _connections.send(_connectionId, err.getError());
                 return;

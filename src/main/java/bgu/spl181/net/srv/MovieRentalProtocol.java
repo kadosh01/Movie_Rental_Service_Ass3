@@ -28,7 +28,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
         String[] split= message.split(" ");
         switch (split[0]){
             case "REGISTER":{
-                super.process(message);
+                Register(message);
                 break;
             }
             case "LOGIN":{
@@ -223,7 +223,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
         String country= split2[1].substring(1, split2[1].length()-1);
         Users user= new User(username, "normal", password, country, new LinkedList<>(), 0);
         _database.addUser(user);
-        ACKCommand ack= new ACKCommand("RGISTER succeeded");
+        ACKCommand ack= new ACKCommand("REGISTER succeeded");
         _connections.send(_connectionId, ack.getACK());
 
     }
