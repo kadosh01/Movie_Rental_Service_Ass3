@@ -2,30 +2,25 @@ package bgu.spl181.net.RentalStore;
 
 import bgu.spl181.net.srv.Database;
 import bgu.spl181.net.srv.Users;
-import com.fasterxml.jackson.databind.util.Converter;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.reflect.TypeToken;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class DatabaseReadWrite implements Database{
 
-    private final String MOVIE_PATH="/home/ava/IdeaProjects/Movie_Rental_Service_Ass3-master/Database/example_Movies.json";
-    private final String USERS_PATH="/home/ava/IdeaProjects/Movie_Rental_Service_Ass3-master/Database/example_Users.json";
+    private final String MOVIE_PATH="C:\\Users\\Joseph\\.IntelliJIdea2017.1\\Projects\\Movie_Rental_Service_Ass3\\Database\\example_Movies.json";
+    private final String USERS_PATH="C:\\Users\\Joseph\\.IntelliJIdea2017.1\\Projects\\Movie_Rental_Service_Ass3\\Database\\example_Users.json";
     private final String U="C:\\Users\\Joseph\\.IntelliJIdea2017.1\\Projects\\Movie_Rental_Service_Ass3\\Database\\Users.json";
     private Gson gson;
     private ConcurrentHashMap<String,Movie> _movies; //<id,Movie>
@@ -35,6 +30,7 @@ public class DatabaseReadWrite implements Database{
     private ReadWriteLock _movieLock;
     private ConcurrentLinkedQueue<Runnable> _ReadWriteJsonQueue;
     private AtomicInteger _movieIdCounter;
+    private Thread _writerThread;
 
     public DatabaseReadWrite(){
         gson=new Gson();
@@ -45,7 +41,6 @@ public class DatabaseReadWrite implements Database{
         _movieLock= new ReentrantReadWriteLock();
         _ReadWriteJsonQueue=new ConcurrentLinkedQueue<>();
         _movieIdCounter= new AtomicInteger(_movies.size());
-
     }
 
     public void DeserializeMovies(){
@@ -159,8 +154,14 @@ public class DatabaseReadWrite implements Database{
         return _movies;
     }
 
-    public boolean updateUserFile(){return true;}
-    public boolean updateMovieFile(){return true;}
+    public void updateUserFile()
+    {
+            SerializedUser();
+    }
+    public void updateMovieFile()
+    {
+            SerializedMovies();
+    }
 
     @Override
     public ConcurrentHashMap<String, Users> getUsers() {
@@ -170,14 +171,10 @@ public class DatabaseReadWrite implements Database{
     @Override
     public void addUser(Users user) {//lock function?
         //_readWriteLock.writeLock().lock();
+        _userLock.writeLock().lock();
         _users.putIfAbsent(user.getUsername(), user);
-        //_readWriteLock.writeLock().unlock();
-
-        _ReadWriteJsonQueue.add(()->{
-            _userLock.readLock().lock();
-            SerializedUser();
-            _userLock.readLock().unlock();
-        });
+        updateUserFile();
+        _userLock.writeLock().unlock();
     }
 
     @Override
@@ -210,6 +207,7 @@ public class DatabaseReadWrite implements Database{
         if(canRent){
             mov.set_availableAmount(mov.get_availableAmount()-1);
         }
+        updateMovieFile();
         _movieLock.writeLock().unlock();
         return canRent;
     }
@@ -263,33 +261,7 @@ public class DatabaseReadWrite implements Database{
         _movieLock.writeLock().lock();
         Movie mov= _movies.get(movieName);
         mov.set_availableAmount(mov.get_availableAmount()+1);
+        updateMovieFile();
         _movieLock.writeLock().unlock();
     }
-
-    /*
-    @Override
-    public HashMap<String, String> getUsersData() {
-        HashMap<String,String> ans=new HashMap<>();
-        for(Map.Entry<String,User> entry : _users.entrySet()){
-            ans.put(entry.getKey(),entry.getValue().get_password());
-        }
-        return ans;
-
-    }
-
-
-    @Override
-    public boolean isLogged(String userName) {
-        return _loggedUsers.get(userName).get();
-    }
-
-    @Override
-    public void setLogIn(String userName) {
-        while (!_loggedUsers.get(userName).compareAndSet(false,true));
-    }
-
-    @Override
-    public void setLogOut(String userName) {
-        while (!_loggedUsers.get(userName).compareAndSet(true,false));
-    }*/
 }
