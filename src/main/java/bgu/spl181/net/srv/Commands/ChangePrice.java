@@ -34,10 +34,10 @@ public class ChangePrice extends Request {
             _connections.send(_connectionId,error.getError());
             return;
         }
-        //_database.addMovie(_movie);
-        //ACKCommand success=new ACKCommand(String.format("addmovie ”{0}” success",_movie.get_name()));
-        //_connections.send(_connectionId,success.getACK());
-        //BroadcastCommand brd= new BroadcastCommand("movie "+_movie.get_name()+" "+_movie.get_availableAmount()+" "+_movie.get_price());
-        //_connections.broadcast(brd.broadcast());
+        _database.changePrice(_movieName,Integer.parseInt(_price));
+        ACKCommand success=new ACKCommand(String.format("changeprice ”{0}” success",_movieName));
+        _connections.send(_connectionId,success.getACK());
+        BroadcastCommand brd= new BroadcastCommand("movie "+_movieName+" "+_database.getMovies().get(_movieName).get_availableAmount()+" "+_database.getMovies().get(_movieName).get_price());
+        _connections.broadcast(brd.broadcast());
     }
 }
