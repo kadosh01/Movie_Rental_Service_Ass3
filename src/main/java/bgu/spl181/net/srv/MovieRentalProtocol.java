@@ -53,7 +53,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                 }
                 switch (split[1]){
                     case "balance":{
-                        String request= split[1]+split[2];
+                        String request= split[1]+" "+split[2];
                         if(request.equals("balance info")){
                             req= new BalanceInfo(_connections,_database,_connectionId);
                             req.execute();
