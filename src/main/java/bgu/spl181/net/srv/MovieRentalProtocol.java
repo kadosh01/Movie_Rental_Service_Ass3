@@ -176,6 +176,14 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
+                        String msg="";
+                        for(int i=2; i<split.length; i++)
+                            msg+=split[i]+" ";
+                        String[] apSplit= msg.split('"'+"");
+                        String movie= apSplit[0];
+                        String price= apSplit[1];
+                        req= new ChangePrice(_connections, _database, _connectionId, movie, price);
+                        req.execute();
                     }
                 }
 

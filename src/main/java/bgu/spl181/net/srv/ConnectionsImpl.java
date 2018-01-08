@@ -41,4 +41,8 @@ public class ConnectionsImpl<T> implements Connections<T> {
 
     public void set_database(Database database){_database=database;}
 
+    public void addConnection(int id, ConnectionHandler ch){
+        _connectionsMap.putIfAbsent(id, ch);
+    }
+
 }

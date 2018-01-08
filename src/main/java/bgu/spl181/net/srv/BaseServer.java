@@ -52,6 +52,7 @@ public abstract class BaseServer<T> implements Server<T> {
                         clientSock,
                         encdecFactory.get(),
                         protocol);
+                _connections.addConnection(_connectionIdCount.get(), handler);
 
                 execute(handler);
             }
