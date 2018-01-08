@@ -19,8 +19,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class DatabaseReadWrite implements Database{
 
-    private final String MOVIE_PATH="/home/ava/IdeaProjects/Movie_Rental_Service_Ass3-master/Database/example_Movies.json";
-    private final String USERS_PATH="/home/ava/IdeaProjects/Movie_Rental_Service_Ass3-master/Database/example_Users.json";
+    private final String MOVIE_PATH="/home/kadoshy/Downloads/spl-net/Movie_Rental_Service_Ass3/Database/example_Movies.json";
+    private final String USERS_PATH="/home/kadoshy/Downloads/spl-net/Movie_Rental_Service_Ass3/Database/example_Users.json";
     private final String U="C:\\Users\\Joseph\\.IntelliJIdea2017.1\\Projects\\Movie_Rental_Service_Ass3\\Database\\Users.json";
     private Gson gson;
     private ConcurrentHashMap<String,Movie> _movies; //<id,Movie>
@@ -61,7 +61,7 @@ public class DatabaseReadWrite implements Database{
             List<String> bannedCountries= gson.fromJson(obj.get("bannedCountries").getAsJsonArray(),new TypeToken<List<String>>(){}.getType()) ;
             String availableAmount=obj.get("availableAmount").getAsString();
             String totalAmount=obj.get("totalAmount").getAsString();
-            _movies.put(id,new Movie(name,Integer.parseInt(price),id,bannedCountries,Integer.parseInt(availableAmount),Integer.parseInt(totalAmount)));
+            _movies.put(name,new Movie(name,Integer.parseInt(price),id,bannedCountries,Integer.parseInt(availableAmount),Integer.parseInt(totalAmount)));
         }
     }
 
@@ -170,7 +170,6 @@ public class DatabaseReadWrite implements Database{
 
     @Override
     public void addUser(Users user) {//lock function?
-        //_readWriteLock.writeLock().lock();
         _userLock.writeLock().lock();
         _users.putIfAbsent(user.getUsername(), user);
         updateUserFile();
@@ -221,7 +220,7 @@ public class DatabaseReadWrite implements Database{
     public void addMovie(Movie newmovie){
         _movieLock.writeLock().lock();
         newmovie.set_id(_movieIdCounter.incrementAndGet()+"");
-        _movies.put(newmovie.get_id(),newmovie);
+        _movies.put(newmovie.get_name(),newmovie);
         updateUserFile();
         _movieLock.writeLock().unlock();
     }
