@@ -75,13 +75,14 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                             String msg="";
                             for(int i=2; i<split.length; i++)
                                 msg+=split[i]+" ";
-                            String[] movie= msg.split('"'+"");
-                            if(movie.length>1){
+                            String movie= msg.replace('"'+"","");//.split('"'+"");
+                            movie=movie.substring(0,movie.length()-1);
+                            if(movie.length()<1){
                                 ERRORCommand err= new ERRORCommand("REQUEST failed, movie doesn't exist");
                                 _connections.send(_connectionId, err.getError());
                                 return;
                             }
-                            req= new MoviesInfo(_connections, _database, _connectionId, movie[0]);
+                            req= new MoviesInfo(_connections, _database, _connectionId, movie);
                             req.execute();
                         }
                         else{//asking info about all the movies in the database
