@@ -45,6 +45,7 @@ public class DatabaseReadWrite implements Database{
         _movieLock= new ReentrantReadWriteLock();
         _ReadWriteJsonQueue=new ConcurrentLinkedQueue<>();
         _movieIdCounter= new AtomicInteger(_movies.size());
+
     }
 
     public void DeserializeMovies(){
@@ -250,7 +251,13 @@ public class DatabaseReadWrite implements Database{
         return false;
     }
 
-    public void changePrice(String movieName,int price){}
+    public void changePrice(String movieName,int price)
+    {
+        _movieLock.writeLock().lock();
+        _movies.get(movieName).set_price(price);
+        updateMovieFile();
+        _movieLock.writeLock().unlock();
+    }
 
     public void increaseAvailableCopies(String movieName){
         _movieLock.writeLock().lock();
