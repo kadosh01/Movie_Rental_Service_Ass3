@@ -18,13 +18,13 @@ public class AddMovie extends Request {
 
     @Override
     public void execute() {
-        if(!(((DatabaseReadWrite)_database).getUserByConnectionId(_connectionId).get_type().equals("admin")))
+        if(!(_database.getUserByConnectionId(_connectionId).get_type().equals("admin")))
         {
             ERRORCommand error=new ERRORCommand("User is not an administrator");
             _connections.send(_connectionId,error.getError());
             return;
         }
-        if(((DatabaseReadWrite)_database).getMoviesNames().contains(_movie.get_name())){
+        if(_database.getMoviesNames().contains(_movie.get_name())){
             ERRORCommand error=new ERRORCommand("Movie name already exists in the system ");
             _connections.send(_connectionId,error.getError());
             return;
@@ -36,7 +36,7 @@ public class AddMovie extends Request {
             return;
         }
         _database.addMovie(_movie);
-        ACKCommand success=new ACKCommand(String.format("addmovie ”{0}” success",_movie.get_name()));
+        ACKCommand success=new ACKCommand("addmovie "+"\""+_movie.get_name()+"\""+" success");
         _connections.send(_connectionId,success.getACK());
         BroadcastCommand brd= new BroadcastCommand("movie "+_movie.get_name()+" "+_movie.get_availableAmount()+" "+_movie.get_price());
         _connections.broadcast(brd.broadcast());

@@ -6,6 +6,7 @@ import bgu.spl181.net.RentalStore.User;
 import bgu.spl181.net.api.bidi.Connections;
 import bgu.spl181.net.srv.Commands.*;
 
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -135,26 +136,29 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
-                        for(int i=2;i<split.length; i++)
-                            msg+=split[i]+" ";
-                        String[] apSplit= msg.split('"'+"");
-                        String movie= apSplit[0];
-                        String[] numbers= apSplit[1].split(" ");
+
+                        String[] apSplit= message.split("\"");
+                        String movie= apSplit[1];
+                        String[] numbers= apSplit[2].split(" ");
                         if(numbers.length<2){
                             ERRORCommand err= new ERRORCommand("REQUEST failed, information missing");
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
-                        int availableAmount= Integer.parseInt(numbers[0]);
-                        int price= Integer.parseInt(numbers[1]);
+                        int index=0;
+                        while(numbers[index].equals("") | numbers[index].equals(" "))
+                            index++;
+                        int availableAmount= Integer.parseInt(numbers[index]);
+                        int price= Integer.parseInt(numbers[++index]);
+
                         List<String> bannedCountries= new LinkedList<>();
-                        for(int i=2; i<apSplit.length; i++){
+                        for(int i=index; i<numbers.length; i++){
                             bannedCountries.add(apSplit[i]);
                         }
                         Movie mov= new Movie(movie, price, "", bannedCountries, availableAmount, availableAmount);
                         req= new AddMovie(_connections, _database, _connectionId, mov);
                         req.execute();
-
+                        break;
                     }
                     case "remmovie":{
                         if(split.length<3){
@@ -169,6 +173,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                         String movie= apSplit[0];
                         req= new RemMovie(_connections, _database, _connectionId, movie);
                         req.execute();
+                        break;
                     }
                     case "changeprice":{
                         if(split.length<4){
@@ -184,6 +189,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                         String price= apSplit[1];
                         req= new ChangePrice(_connections, _database, _connectionId, movie, price);
                         req.execute();
+                        break;
                     }
                 }
 

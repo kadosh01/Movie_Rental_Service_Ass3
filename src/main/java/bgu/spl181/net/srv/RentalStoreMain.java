@@ -25,14 +25,21 @@ public class RentalStoreMain {
             d.DeserializeUsers();
             d.DeserializeMovies();
 
+            String s= "movie "+"\""+"South Park"+"\"";
+            System.out.println(s);
+            String[] split= s.split("\"");
+            System.out.println(split.length);
+            for(int i=0; i<split.length; i++)
+                System.out.println(split[i]);
 
 // you can use any server...
+            /*
         Server.threadPerClient(
                 7777, //port
                 () -> new MovieRentalProtocol(d), //protocol factory
                 LineMessageEncoderDecoder::new //message encoder decoder factory
         ).serve();
-
+*/
            // Server.reactor(
           //          Runtime.getRuntime().availableProcessors(),
           //          7777, //port
