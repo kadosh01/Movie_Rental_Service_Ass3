@@ -21,7 +21,7 @@ public class MoviesInfo extends Request{
     public void execute() {
         String msg;
         if(_movieName.length()>0){
-            if(!_database.getMovies().containsKey(_movieName)){
+            if(!_database.containsMovie(_movieName)){
                 ERRORCommand err= new ERRORCommand("movie doesn't exist");
                 _connections.send(_connectionId, err.getError());
                 return;

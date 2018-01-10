@@ -16,7 +16,7 @@ public class ReturnMovie extends Request{
 
     @Override
     public void execute() {
-        if(!_database.getMovies().containsKey(_movieName)){
+        if(!_database.containsMovie(_movieName)){
             ERRORCommand err= new ERRORCommand("movie doesn't exist");
             _connections.send(_connectionId, err.getError());
             return;

@@ -24,7 +24,7 @@ public class AddMovie extends Request {
             _connections.send(_connectionId,error.getError());
             return;
         }
-        if(_database.getMoviesNames().contains(_movie.get_name())){
+        if(_database.containsMovie(_movie.get_name())){
             ERRORCommand error=new ERRORCommand("Movie already exists in the system ");
             _connections.send(_connectionId,error.getError());
             return;

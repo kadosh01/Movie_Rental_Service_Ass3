@@ -25,7 +25,7 @@ public class ChangePrice extends Request {
             _connections.send(_connectionId,error.getError());
             return;
         }
-        if(!_database.getMoviesNames().contains(_movieName)){
+        if(!_database.containsMovie(_movieName)){
             ERRORCommand error=new ERRORCommand("Movie does not exists in the system ");
             _connections.send(_connectionId,error.getError());
             return;

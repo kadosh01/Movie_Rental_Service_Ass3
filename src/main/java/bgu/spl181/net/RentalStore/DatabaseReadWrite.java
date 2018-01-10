@@ -211,6 +211,14 @@ public class DatabaseReadWrite implements Database{
         return canRent;
     }
 
+    public boolean containsMovie(String movieName){
+        for(String s : _movies.keySet()){
+            if(s.equalsIgnoreCase(movieName))
+                return true;
+        }
+        return false;
+    }
+
     public Movie getMovie(String movieName){
         _movieLock.readLock().lock();
         Movie ret= _movies.get(movieName).clone();

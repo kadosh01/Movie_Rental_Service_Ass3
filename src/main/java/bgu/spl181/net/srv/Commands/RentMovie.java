@@ -17,7 +17,7 @@ public class RentMovie extends Request{
 
     @Override
     public void execute() {
-        if(!_database.getMovies().containsKey(_movieName)){//synchronize???
+        if(!_database.containsMovie(_movieName)){//synchronize???
             ERRORCommand err= new ERRORCommand("movie doesn't exist");
             _connections.send(_connectionId, err.getError());
             return;
