@@ -94,7 +94,7 @@ public class DatabaseReadWrite implements Database{
     }
 
     public void SerializedUser(){
-        try(Writer writer=new FileWriter(U)){
+        try(Writer writer=new FileWriter(USERS_PATH)){
             JsonObject file=new JsonObject();
             JsonArray users=new JsonArray();
             //users.add("usuers");
@@ -169,7 +169,7 @@ public class DatabaseReadWrite implements Database{
     }
 
     @Override
-    public void addUser(Users user) {//lock function?
+    public void addUser(Users user) {
         _userLock.writeLock().lock();
         _users.putIfAbsent(user.getUsername(), user);
         updateUserFile();

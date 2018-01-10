@@ -25,18 +25,18 @@ public class AddMovie extends Request {
             return;
         }
         if(_database.getMoviesNames().contains(_movie.get_name())){
-            ERRORCommand error=new ERRORCommand("Movie name already exists in the system ");
+            ERRORCommand error=new ERRORCommand("Movie already exists in the system ");
             _connections.send(_connectionId,error.getError());
             return;
         }
         if(_movie.get_price()<=0 || _movie.get_availableAmount()<=0)
         {
-            ERRORCommand error=new ERRORCommand("Price or Amount are smaller than or equal to 0 (there are no free movies)");
+            ERRORCommand error=new ERRORCommand("Price or Amount are smaller than or equal to 0");
             _connections.send(_connectionId,error.getError());
             return;
         }
         _database.addMovie(_movie);
-        ACKCommand success=new ACKCommand("addmovie "+"\""+_movie.get_name()+"\""+" success");
+        ACKCommand success=new ACKCommand("REQUEST addmovie "+"\""+_movie.get_name()+"\""+" success");
         _connections.send(_connectionId,success.getACK());
         BroadcastCommand brd= new BroadcastCommand("movie "+_movie.get_name()+" "+_movie.get_availableAmount()+" "+_movie.get_price());
         _connections.broadcast(brd.broadcast());

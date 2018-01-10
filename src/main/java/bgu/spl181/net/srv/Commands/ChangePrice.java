@@ -7,8 +7,10 @@ import bgu.spl181.net.api.bidi.Connections;
  * Created by Joseph on 07/01/2018.
  */
 public class ChangePrice extends Request {
+
     private String _movieName;
     private String _price;
+
     public ChangePrice(Connections connections, DatabaseReadWrite database, int connectionId,String movieNmae,String price) {
         super(connections, database, connectionId);
         _movieName=movieNmae;
@@ -17,13 +19,13 @@ public class ChangePrice extends Request {
 
     @Override
     public void execute() {
-        if(!(((DatabaseReadWrite)_database).getUserByConnectionId(_connectionId).get_type().equals("admin")))
+        if(!(_database.getUserByConnectionId(_connectionId).get_type().equals("admin")))
         {
             ERRORCommand error=new ERRORCommand("User is not an administrator");
             _connections.send(_connectionId,error.getError());
             return;
         }
-        if(!((DatabaseReadWrite)_database).getMoviesNames().contains(_movieName)){
+        if(!_database.getMoviesNames().contains(_movieName)){
             ERRORCommand error=new ERRORCommand("Movie does not exists in the system ");
             _connections.send(_connectionId,error.getError());
             return;
@@ -35,7 +37,7 @@ public class ChangePrice extends Request {
             return;
         }
         _database.changePrice(_movieName,Integer.parseInt(_price));
-        ACKCommand success=new ACKCommand(String.format("changeprice ”{0}” success",_movieName));
+        ACKCommand success=new ACKCommand("REQUEST changeprice "+_movieName + " success");
         _connections.send(_connectionId,success.getACK());
         BroadcastCommand brd= new BroadcastCommand("movie "+_movieName+" "+_database.getMovies().get(_movieName).get_availableAmount()+" "+_database.getMovies().get(_movieName).get_price());
         _connections.broadcast(brd.broadcast());

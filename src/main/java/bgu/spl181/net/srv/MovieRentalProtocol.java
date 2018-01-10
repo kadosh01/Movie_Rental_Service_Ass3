@@ -26,8 +26,10 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
     }
 
     public void process(String message) {
-        String[] split= message.split(" ");
-        switch (split[0]){
+       // String[] split= message.split(" ");
+        List<String> split= splitString(message, ' ');
+        String command= split.get(0);
+        switch (command){
             case "REGISTER":{
                 Register(message);
                 break;
@@ -47,42 +49,50 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                     _connections.send(_connectionId, err.getError());
                     return;
                 }
-                if(split.length<2){
+                if(split.size()<2){
                     ERRORCommand err= new ERRORCommand("request doesn't exist");
                     _connections.send(_connectionId, err.getError());
                     return;
                 }
-                switch (split[1]){
+                String requests= split.get(1);
+                switch (requests){
                     case "balance":{
-                        String request= split[1]+" "+split[2];
-                        if(request.equals("balance info")){
+                        //String request= split[1]+" "+split[2];
+                        if(split.size()<3){
+                            ERRORCommand err= new ERRORCommand("request doesn't exist");
+                            _connections.send(_connectionId, err.getError());
+                            return;
+                        }
+                        if(split.get(2).equals("info")){
                             req= new BalanceInfo(_connections,_database,_connectionId);
                             req.execute();
                         }
-                        else if(request.equals("balance add")){
-                            if(split.length<4){//amount missing
+                        else if(split.get(2).equals("add")){
+                            if(split.size()<4){//amount missing
                                 ERRORCommand err= new ERRORCommand("REQUEST failed, amount required");
                                 _connections.send(_connectionId, err.getError());
                                 return;
                             }
-                            int amount= Integer.parseInt(split[3]);
+                            int amount= Integer.parseInt(split.get(3));
                             req= new BalanceAdd(_connections, _database, _connectionId, amount);
                             req.execute();
                         }
                         break;
                     }
                     case "info":{
-                        if(split.length>2){//asking info about a specific movie
+                        if(split.size()>2){//asking info about a specific movie
                             String msg="";
-                            for(int i=2; i<split.length; i++)
-                                msg+=split[i]+" ";
-                            String movie= msg.replace('"'+"","");//.split('"'+"");
-                            movie=movie.substring(0,movie.length()-1);
-                            if(movie.length()<1){
-                                ERRORCommand err= new ERRORCommand("REQUEST failed, movie doesn't exist");
+                            for(int i=2; i<split.size(); i++)
+                                msg+=split.get(i)+" ";
+                            //String movie= msg.replace('"'+"","");//.split('"'+"");
+                            //movie=movie.substring(0,movie.length()-1);
+                            List<String> apSplit= splitString(msg, '\"');
+                            if(apSplit.size()>1){
+                                ERRORCommand err= new ERRORCommand("request doesn't exist");
                                 _connections.send(_connectionId, err.getError());
                                 return;
                             }
+                            String movie= apSplit.get(0);
                             req= new MoviesInfo(_connections, _database, _connectionId, movie);
                             req.execute();
                         }
@@ -93,68 +103,70 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                         break;
                     }
                     case "rent":{
-                        if(split.length<3){//movie name missing
+                        if(split.size()<3){//movie name missing
                             ERRORCommand err= new ERRORCommand("REQUEST failed, movie name required");
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
                         String msg="";
-                        for(int i=2; i<split.length; i++)
-                            msg+=split[i]+" ";
-                        String[] movie= msg.split('"'+"");
-                        if(movie.length>1){
+                        for(int i=2; i<split.size(); i++)
+                            msg+=split.get(i)+" ";
+                        List<String> apSplit= splitString(msg, '\"');
+                        if(apSplit.size()>1){
                             ERRORCommand err= new ERRORCommand("REQUEST failed, movie doesn't exist");
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
-                        req= new RentMovie(_connections, _database, _connectionId, movie[0]);
+                        String movie= apSplit.get(0);
+                        req= new RentMovie(_connections, _database, _connectionId, movie);
                         req.execute();
                         break;
                     }
                     case "return":{
-                        if(split.length<3){//movie name missing
+                        if(split.size()<3){//movie name missing
                             ERRORCommand err= new ERRORCommand("REQUEST failed, movie name required");
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
                         String msg="";
-                        for(int i=2; i<split.length; i++)
-                            msg+=split[i]+" ";
-                        String[] movie= msg.split('"'+"");
-                        if(movie.length>1){
+                        for(int i=2; i<split.size(); i++)
+                            msg+=split.get(i)+" ";
+                        //String[] movie= msg.split('"'+"");
+                        List<String> apSplit= splitString(msg, '\"');
+                        if(apSplit.size()>1){
                             ERRORCommand err= new ERRORCommand("REQUEST failed, movie doesn't exist");
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
-                        req= new ReturnMovie(_connections, _database, _connectionId, movie[0]);
+                        String movie= apSplit.get(0);
+                        req= new ReturnMovie(_connections, _database, _connectionId, movie);
                         req.execute();
                         break;
                     }
                     case "addmovie":{
                         String msg="";
-                        if(split.length<5){
+                        if(split.size()<5){
                             ERRORCommand err= new ERRORCommand("REQUEST failed, information missing");
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
 
-                        String[] apSplit= message.split("\"");
-                        String movie= apSplit[1];
-                        String[] numbers= apSplit[2].split(" ");
-                        if(numbers.length<2){
+                        List<String> apSplit= splitString(message, '\"');
+                        //String[] apSplit= message.split("\"");
+                        String movie= apSplit.get(1);
+                        //String[] numbers= apSplit[2].split(" ");
+                        List<String> numbers= splitString(apSplit.get(2), ' ');
+                        if(numbers.size()<2){
                             ERRORCommand err= new ERRORCommand("REQUEST failed, information missing");
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
-                        int index=0;
-                        while(numbers[index].equals("") | numbers[index].equals(" "))
-                            index++;
-                        int availableAmount= Integer.parseInt(numbers[index]);
-                        int price= Integer.parseInt(numbers[++index]);
+                        int availableAmount= Integer.parseInt(numbers.get(0));
+                        int price= Integer.parseInt(numbers.get(1));
 
                         List<String> bannedCountries= new LinkedList<>();
-                        for(int i=index; i<numbers.length; i++){
-                            bannedCountries.add(numbers[i]);
+                        for(int i=3; i<apSplit.size(); i++){
+                            bannedCountries.add(apSplit.get(i));
                         }
                         Movie mov= new Movie(movie, price, "", bannedCountries, availableAmount, availableAmount);
                         req= new AddMovie(_connections, _database, _connectionId, mov);
@@ -162,32 +174,42 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                         break;
                     }
                     case "remmovie":{
-                        if(split.length<3){
-                            ERRORCommand err= new ERRORCommand("REQUEST failed, information missing");
+                        if(split.size()<3){
+                            ERRORCommand err= new ERRORCommand("request doesn't exist");
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
                         String msg="";
-                        for(int i=2; i<split.length; i++)
-                            msg+=split[i]+" ";
-                        String[] apSplit= msg.split('"'+"");
-                        String movie= apSplit[0];
+                        for(int i=2; i<split.size(); i++)
+                            msg+=split.get(i)+" ";
+                        //String[] apSplit= msg.split('"'+"");
+                        //String movie= apSplit[0];
+                        List<String> apSplit= splitString(msg, '\"');
+                        if(apSplit.size()>1){
+                            ERRORCommand err= new ERRORCommand("request doesn't exist");
+                            _connections.send(_connectionId, err.getError());
+                            return;
+                        }
+                        String movie= apSplit.get(0);
                         req= new RemMovie(_connections, _database, _connectionId, movie);
                         req.execute();
                         break;
                     }
                     case "changeprice":{
-                        if(split.length<4){
+                        if(split.size()<4){
                             ERRORCommand err= new ERRORCommand("REQUEST failed, information missing");
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
                         String msg="";
-                        for(int i=2; i<split.length; i++)
-                            msg+=split[i]+" ";
-                        String[] apSplit= msg.split('"'+"");
-                        String movie= apSplit[0];
-                        String price= apSplit[1];
+                        for(int i=2; i<split.size(); i++)
+                            msg+=split.get(i)+" ";
+                        //String[] apSplit= msg.split('"'+"");
+                        //String movie= apSplit[0];
+                        //String price= apSplit[1];
+                        List<String> apSlit= splitString(msg, '\"');
+                        String movie= apSlit.get(0);
+                        String price= apSlit.get(1).trim();
                         req= new ChangePrice(_connections, _database, _connectionId, movie, price);
                         req.execute();
                         break;
@@ -197,6 +219,46 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
             }
             default:
         }
+    }
+
+    public List<String> splitString(String s, char[] del){
+        List<String> ret= new LinkedList<>();
+        int index=0;
+        while(index<s.length()){
+            String curr="";
+            while(index<s.length() && !contains(del, s.charAt(index))){
+                curr+=s.charAt(index);
+                index++;
+            }
+            if(curr.trim().length()>0)
+                ret.add(curr);
+            index++;
+        }
+        return ret;
+    }
+
+    public List<String> splitString(String s, char c){
+        List<String> ret= new LinkedList<>();
+        int index=0;
+        while(index<s.length()){
+            String curr="";
+            while(index<s.length() && s.charAt(index)!=c){
+                curr+=s.charAt(index);
+                index++;
+            }
+            if(curr.trim().length()>0)
+                ret.add(curr);
+            index++;
+        }
+        return ret;
+    }
+
+    public boolean contains(char[] delimiters, char c){
+        for(int i=0; i<delimiters.length; i++){
+            if(delimiters[i]==c)
+                return true;
+        }
+        return false;
     }
 
     @Override

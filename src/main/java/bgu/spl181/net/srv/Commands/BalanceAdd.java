@@ -18,8 +18,8 @@ public class BalanceAdd extends Request{
     @Override
     public void execute() {
         User user= _database.getUserByConnectionId(_connectionId);
-        int balance= user.get_balance();  //synchronize!!
-        user.set_balance(balance+_amount);//
+        int balance= user.get_balance();
+        user.set_balance(balance+_amount);
         _database.updateUserFile();
         ACKCommand ack= new ACKCommand("balance "+user.get_balance()+" added "+_amount);
         _connections.send(_connectionId, ack.getACK());

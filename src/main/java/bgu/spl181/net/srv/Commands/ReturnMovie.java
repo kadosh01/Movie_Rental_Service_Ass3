@@ -30,6 +30,7 @@ public class ReturnMovie extends Request{
         }
         user.get_rentedMovies().remove(_movieName);
         _database.increaseAvailableCopies(_movieName);
+        _database.updateUserFile();
         ACKCommand ack= new ACKCommand("return "+_movieName+" success");
         _connections.send(_connectionId, ack.getACK());
         BroadcastCommand brd= new BroadcastCommand("movie "+_movieName+" "+_database.getMovie(_movieName).get_availableAmount()+" "+_database.getMovie(_movieName).get_price());

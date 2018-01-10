@@ -25,12 +25,17 @@ public class RentalStoreMain {
             d.DeserializeUsers();
             d.DeserializeMovies();
 
-            String s= "movie "+"\""+"South Park"+"\"";
+            MovieRentalProtocol m= new MovieRentalProtocol(d);
+
+            String s1= "movie "+"\""+"South Park"+"\""+" 4 25";
+            String s= "addmovie "+"\""+"South Park"+"\""+" 3 25 "+"\""+"Iran"+"\""+" \""+"Irak"+"\"";
             System.out.println(s);
-            String[] split= s.split("\"");
-            System.out.println(split.length);
-            for(int i=0; i<split.length; i++)
-                System.out.println(split[i]);
+            char[] del= {'\"', ' '};
+            List<String> l= m.splitString(s, '\"');
+            System.out.println(l.size());
+            for(String st : l){
+                System.out.println(st);
+            }
 
 // you can use any server...
             /*
