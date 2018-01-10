@@ -21,36 +21,26 @@ public class RentalStoreMain {
 
         public static void main(String[] args) {
 
-            DatabaseReadWrite d=new DatabaseReadWrite();
-            d.DeserializeUsers();
-            d.DeserializeMovies();
-
-            MovieRentalProtocol m= new MovieRentalProtocol(d);
-
-            String s1= "movie "+"\""+"South Park"+"\""+" 4 25";
-            String s= "addmovie "+"\""+"South Park"+"\""+" 3 25 "+"\""+"Iran"+"\""+" \""+"Irak"+"\"";
-            System.out.println(s);
-            char[] del= {'\"', ' '};
-            List<String> l= m.splitString(s, '\"');
-            System.out.println(l.size());
-            for(String st : l){
-                System.out.println(st);
-            }
+            DatabaseReadWrite dat= new DatabaseReadWrite();
+            dat.DeserializeMovies();
+            dat.DeserializeUsers();
 
 // you can use any server...
-            /*
-        Server.threadPerClient(
-                7777, //port
-                () -> new MovieRentalProtocol(d), //protocol factory
-                LineMessageEncoderDecoder::new //message encoder decoder factory
-        ).serve();
-*/
-           // Server.reactor(
-          //          Runtime.getRuntime().availableProcessors(),
-          //          7777, //port
-          //          () ->  new RemoteCommandInvocationProtocol<>(feed), //protocol factory
-          //          ObjectEncoderDecoder::new //message encoder decoder factory
-          //  ).serve();
+            Server.threadPerClient(
+                    7777, //port
+                    () -> new MovieRentalProtocol(dat), //protocol factory
+                    LineMessageEncoderDecoder::new //message encoder decoder factory
+            ).serve();
 
+// you can use any server...
+
+       /*
+            Server.reactor(
+                    Runtime.getRuntime().availableProcessors(),
+                    7777, //port
+                    () ->  new MovieRentalProtocol(dat), //protocol factory
+                    LineMessageEncoderDecoder::new //message encoder decoder factory
+            ).serve();
+*/
         }
     }

@@ -28,7 +28,10 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
     public void process(String message) {
        // String[] split= message.split(" ");
         List<String> split= splitString(message, ' ');
-        String command= split.get(0);
+        String command="";
+        if(!split.isEmpty()) {
+            command = split.get(0); //out of bounds
+        }
         switch (command){
             case "REGISTER":{
                 Register(message);
@@ -217,7 +220,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                 }
 
             }
-            default:
+            default:{_connections.send(_connectionId,"Command does not exist");}
         }
     }
 
