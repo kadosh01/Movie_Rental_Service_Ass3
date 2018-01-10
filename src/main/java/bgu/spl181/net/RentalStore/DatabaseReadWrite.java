@@ -19,8 +19,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class DatabaseReadWrite implements Database{
 
-    private final String MOVIE_PATH="/home/kadoshy/Downloads/spl-net/Movie_Rental_Service_Ass3/Database/example_Movies.json";
-    private final String USERS_PATH="/home/kadoshy/Downloads/spl-net/Movie_Rental_Service_Ass3/Database/example_Users.json";
+    private final String MOVIE_PATH="/home/ava/IdeaProjects/Movie_Rental_Service_Ass3-master/Database/example_Movies.json";
+    private final String USERS_PATH="/home/ava/IdeaProjects/Movie_Rental_Service_Ass3-master/Database/example_Users.json";
     private final String U="C:\\Users\\Joseph\\.IntelliJIdea2017.1\\Projects\\Movie_Rental_Service_Ass3\\Database\\Users.json";
     private Gson gson;
     private ConcurrentHashMap<String,Movie> _movies; //<id,Movie>
@@ -222,6 +222,7 @@ public class DatabaseReadWrite implements Database{
         newmovie.set_id(_movieIdCounter.incrementAndGet()+"");
         _movies.put(newmovie.get_name(),newmovie);
         updateUserFile();
+        updateMovieFile();
         _movieLock.writeLock().unlock();
     }
 
@@ -229,7 +230,7 @@ public class DatabaseReadWrite implements Database{
         String out="";
         _movieLock.readLock().lock();
         for(String movie: _movies.keySet()){
-            out=out+movie+" ";
+            out=out+"\""+movie+"\" ";
         }
         _movieLock.readLock().unlock();
         return out;

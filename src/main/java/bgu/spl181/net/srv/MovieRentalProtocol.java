@@ -154,7 +154,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
 
                         List<String> bannedCountries= new LinkedList<>();
                         for(int i=index; i<numbers.length; i++){
-                            bannedCountries.add(apSplit[i]);
+                            bannedCountries.add(numbers[i]);
                         }
                         Movie mov= new Movie(movie, price, "", bannedCountries, availableAmount, availableAmount);
                         req= new AddMovie(_connections, _database, _connectionId, mov);
