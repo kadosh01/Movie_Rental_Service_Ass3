@@ -2,28 +2,39 @@
 	"Commands":
 	[
 		[
-		"REGISTER user1 123 country='france' ",
-		"LOGIN user1 123 ",
-		"REQUEST balance add 100 ",
-		"REQUEST info 'The Godfather' ",
-		"REQUEST rent 'The Godfather' ",
-		"SIGNOUT "
-	],
-		[
-		"REGISTER user2 222 country='israel' ",
-		"LOGIN user2 222 ",
-		"REQUEST balance add 100 ",
-		"REQUEST info 'The Godfather' ",
-		"REQUEST rent 'The Godfather' ",
-		"SIGNOUT "
+			"LOGIN user1 123 ",
+			"REQUEST balance add 50 ",
+			"REQUEST return 'the godfather' ",
+			"SIGNOUT "
 		],
 		[
-		"REGISTER user3 111 country='russia' ",
-		"LOGIN user3 111 ",
-		"REQUEST balance add 100 ",
-		"REQUEST info 'The Godfather' ",
-		"REQUEST rent 'The Godfather' ",
-		"SIGNOUT "
+			"LOGIN user2 222 ",
+			"REQUEST balance add 25",
+			"REQUEST rent 'justice league' ",
+			"SIGNOUT "
+		],
+		[
+			"LOGIN user3 111 ",
+			"REQUEST remmovie 'the notebook' ",
+			"SIGNOUT "
+		],
+		[
+			"LOGIN lisa chips123 ",
+			"SIGNOUT "
+		],
+		[
+			"LOGIN john potato ",
+			"REQUEST addmovie 'South Park' 4 20 'Lebanon' ",
+			"REQUEST remmovie 'justice league' ",
+			"SIGNOUT "
+		],
+		[
+			"LOGIN shlomi cocacola ",
+			"SIGNOUT "
+		],
+		[
+			"LOGIN user4 1234 ",
+			"SIGNOUT "
 		]
 	]
 }

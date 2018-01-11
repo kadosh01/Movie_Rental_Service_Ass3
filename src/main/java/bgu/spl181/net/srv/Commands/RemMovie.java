@@ -30,9 +30,9 @@ public class RemMovie extends Request {
             return;
         }
         if(_database.tryToRemove(_movie)) {
-            ACKCommand success = new ACKCommand("REQUEST remmovie"+_movie+ " success");
+            ACKCommand success = new ACKCommand("REQUEST remmovie '\"'"+_movie+ "'\"' success");
             _connections.send(_connectionId,success.getACK());
-            BroadcastCommand brd= new BroadcastCommand("movie "+_movie+" removed");
+            BroadcastCommand brd= new BroadcastCommand("movie '\"'"+_movie+"'\"' removed");
             _connections.broadcast(brd.broadcast());
         }
         else{

@@ -110,6 +110,7 @@ public class Reactor<T> implements Server<T> {
                 protocol, //was protocolFactory.get();
                 clientChan,
                 this);
+        ((ConnectionsImpl)_connections).addConnection(_connectionIdCount.get(), handler);
         clientChan.register(selector, SelectionKey.OP_READ, handler);
     }
 
