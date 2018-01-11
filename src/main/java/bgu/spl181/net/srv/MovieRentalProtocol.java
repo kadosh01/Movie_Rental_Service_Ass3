@@ -147,7 +147,6 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                         break;
                     }
                     case "addmovie":{
-                        String msg="";
                         if(split.size()<5){
                             ERRORCommand err= new ERRORCommand("REQUEST failed, information missing");
                             _connections.send(_connectionId, err.getError());
@@ -207,9 +206,6 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                         String msg="";
                         for(int i=2; i<split.size(); i++)
                             msg+=split.get(i)+" ";
-                        //String[] apSplit= msg.split('"'+"");
-                        //String movie= apSplit[0];
-                        //String price= apSplit[1];
                         List<String> apSlit= splitString(msg, '\"');
                         String movie= apSlit.get(0);
                         String price= apSlit.get(1).trim();
@@ -218,6 +214,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                         break;
                     }
                 }
+                break;
 
             }
             default:{_connections.send(_connectionId,"Command does not exist");}

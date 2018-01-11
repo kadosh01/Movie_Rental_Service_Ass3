@@ -11,6 +11,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -19,8 +20,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class DatabaseReadWrite implements Database{
 
-    private final String MOVIE_PATH="/home/kadoshy/Downloads/spl-net/Movie_Rental_Service_Ass3/Database/example_Movies.json";
-    private final String USERS_PATH="/home/kadoshy/Downloads/spl-net/Movie_Rental_Service_Ass3/Database/example_Users.json";
+    private final String MOVIE_PATH="/home/ava/IdeaProjects/Movie_Rental_Service_Ass3-master/Database/example_Movies.json";
+    private final String USERS_PATH="/home/ava/IdeaProjects/Movie_Rental_Service_Ass3-master/Database/example_Users.json";
     private Gson gson;
     private ConcurrentHashMap<String,Movie> _movies; //<id,Movie>
     private ConcurrentHashMap<String,Users> _users; //<username,User>
@@ -39,7 +40,7 @@ public class DatabaseReadWrite implements Database{
         _userLock=new ReentrantReadWriteLock();
         _movieLock= new ReentrantReadWriteLock();
         _ReadWriteJsonQueue=new ConcurrentLinkedQueue<>();
-        _movieIdCounter= new AtomicInteger(_movies.size());
+
     }
 
     public void DeserializeMovies(){
@@ -60,8 +61,10 @@ public class DatabaseReadWrite implements Database{
             List<String> bannedCountries= gson.fromJson(obj.get("bannedCountries").getAsJsonArray(),new TypeToken<List<String>>(){}.getType()) ;
             String availableAmount=obj.get("availableAmount").getAsString();
             String totalAmount=obj.get("totalAmount").getAsString();
-            _movies.put(name,new Movie(name,Integer.parseInt(price),id,bannedCountries,Integer.parseInt(availableAmount),Integer.parseInt(totalAmount)));
+            //changed to lower case
+            _movies.put(name.toLowerCase(),new Movie(name,Integer.parseInt(price),id,bannedCountries,Integer.parseInt(availableAmount),Integer.parseInt(totalAmount)));
         }
+        _movieIdCounter= new AtomicInteger(_movies.size());
     }
 
     public void DeserializeUsers(){
@@ -153,12 +156,10 @@ public class DatabaseReadWrite implements Database{
         return _movies;
     }
 
-    public void updateUserFile()
-    {
+    public void updateUserFile() {
             SerializedUser();
     }
-    public void updateMovieFile()
-    {
+    public void updateMovieFile() {
             SerializedMovies();
     }
 
@@ -200,7 +201,8 @@ public class DatabaseReadWrite implements Database{
 
     public boolean tryRentMovie(String movieName){
         _movieLock.writeLock().lock();
-        Movie mov= _movies.get(movieName);
+        Movie mov= _movies.get(movieName.toLowerCase());
+        //added to lower case
         boolean canRent= mov.get_availableAmount()>0;
         if(canRent){
             mov.set_availableAmount(mov.get_availableAmount()-1);
@@ -211,23 +213,23 @@ public class DatabaseReadWrite implements Database{
     }
 
     public boolean containsMovie(String movieName){
-        for(String s : _movies.keySet()){
-            if(s.equalsIgnoreCase(movieName))
-                return true;
-        }
-        return false;
+        //added to lower case
+        return _movies.containsKey(movieName.toLowerCase());
+
     }
 
     public Movie getMovie(String movieName){
         _movieLock.readLock().lock();
-        Movie ret= _movies.get(movieName).clone();
+        //added to lower case
+        Movie ret= _movies.get(movieName.toLowerCase()).clone();
         _movieLock.readLock().unlock();
         return ret;
     }
     public void addMovie(Movie newmovie){
         _movieLock.writeLock().lock();
         newmovie.set_id(_movieIdCounter.incrementAndGet()+"");
-        _movies.put(newmovie.get_name(),newmovie);
+        //added to lower case
+        _movies.put(newmovie.get_name().toLowerCase(),newmovie);
         updateUserFile();
         updateMovieFile();
         _movieLock.writeLock().unlock();
@@ -237,7 +239,7 @@ public class DatabaseReadWrite implements Database{
         String out="";
         _movieLock.readLock().lock();
         for(String movie: _movies.keySet()){
-            out=out+"\""+movie+"\" ";
+            out=out+"\""+_movies.get(movie).get_name()+"\" ";
         }
         _movieLock.readLock().unlock();
         return out;
@@ -246,8 +248,9 @@ public class DatabaseReadWrite implements Database{
     public boolean tryToRemove(String name)
     {
         _movieLock.writeLock().lock();
-        if(_movies.get(name).get_totalAmount()==_movies.get(name).get_availableAmount()){
-            _movies.remove(name);
+        //added to lower case
+        if(_movies.get(name.toLowerCase()).get_totalAmount()==_movies.get(name.toLowerCase()).get_availableAmount()){
+            _movies.remove(name.toLowerCase());
             updateMovieFile();
             _movieLock.writeLock().unlock();
             return true;
@@ -259,14 +262,16 @@ public class DatabaseReadWrite implements Database{
     public void changePrice(String movieName,int price)
     {
         _movieLock.writeLock().lock();
-        _movies.get(movieName).set_price(price);
+        //added to lower case
+        _movies.get(movieName.toLowerCase()).set_price(price);
         updateMovieFile();
         _movieLock.writeLock().unlock();
     }
 
     public void increaseAvailableCopies(String movieName){
         _movieLock.writeLock().lock();
-        Movie mov= _movies.get(movieName);
+        //added to lower case
+        Movie mov= _movies.get(movieName.toLowerCase());
         mov.set_availableAmount(mov.get_availableAmount()+1);
         updateMovieFile();
         _movieLock.writeLock().unlock();
