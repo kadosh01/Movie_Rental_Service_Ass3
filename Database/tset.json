@@ -1,0 +1,30 @@
+{
+	"Commands":
+	[
+		[
+		"REGISTER user1 123 country='france' ",
+		"LOGIN user1 123 ",
+		"REQUEST balance add 100 ",
+		"REQUEST info 'The Godfather' ",
+		"REQUEST rent 'The Godfather' ",
+		"SIGNOUT "
+	],
+		[
+		"REGISTER user2 222 country='israel' ",
+		"LOGIN user2 222 ",
+		"REQUEST balance add 100 ",
+		"REQUEST info 'The Godfather' ",
+		"REQUEST rent 'The Godfather' ",
+		"SIGNOUT "
+		],
+		[
+		"REGISTER user3 111 country='russia' ",
+		"LOGIN user3 111 ",
+		"REQUEST balance add 100 ",
+		"REQUEST info 'The Godfather' ",
+		"REQUEST rent 'The Godfather' ",
+		"SIGNOUT "
+		]
+	]
+}
+			

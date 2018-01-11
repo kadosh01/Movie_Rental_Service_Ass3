@@ -55,7 +55,10 @@ public class ServerTestClient {
                         int i=0;
                         do {
                             System.out.println("sending message to server :"+commands.get(i));
-                            out.write(commands.get(i++));
+                            if(i<commands.size()-1) {
+                                out.write(commands.get(i++));
+                            }
+                            else break;
                             out.newLine();
                             out.flush();
 
