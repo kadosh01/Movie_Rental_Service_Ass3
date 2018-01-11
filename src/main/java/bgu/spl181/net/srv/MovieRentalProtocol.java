@@ -218,7 +218,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                         break;
                     }
                 }
-
+                break;
             }
             default:{_connections.send(_connectionId,"Command does not exist");}
         }
