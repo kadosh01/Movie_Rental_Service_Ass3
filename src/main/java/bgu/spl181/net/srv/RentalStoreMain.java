@@ -21,23 +21,26 @@ public class RentalStoreMain {
 
         public static void main(String[] args) {
 
-            DatabaseReadWrite d=new DatabaseReadWrite();
-            d.DeserializeUsers();
-            d.DeserializeMovies();
-/*
-        Server.threadPerClient(
-                7777, //port
-                () -> new MovieRentalProtocol(d), //protocol factory
-                LineMessageEncoderDecoder::new //message encoder decoder factory
-        ).serve();
-*/
+            DatabaseReadWrite dat= new DatabaseReadWrite();
+            dat.DeserializeMovies();
+            dat.DeserializeUsers();
 
-            Server.reactor(
-                    Runtime.getRuntime().availableProcessors(),
+// you can use any server...
+            Server.threadPerClient(
                     7777, //port
-                    () ->  new MovieRentalProtocol(d), //protocol factory
+                    () -> new MovieRentalProtocol(dat), //protocol factory
                     LineMessageEncoderDecoder::new //message encoder decoder factory
             ).serve();
 
+// you can use any server...
+
+       /*
+            Server.reactor(
+                    Runtime.getRuntime().availableProcessors(),
+                    7777, //port
+                    () ->  new MovieRentalProtocol(dat), //protocol factory
+                    LineMessageEncoderDecoder::new //message encoder decoder factory
+            ).serve();
+*/
         }
     }

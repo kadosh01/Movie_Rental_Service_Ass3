@@ -81,6 +81,7 @@ public abstract class UserServiceTextBasedProtocol implements BidiMessagingProto
 
     @Override
     public boolean shouldTerminate() {//when does it change to true??
+         //added disconnect
         return _shouldTerminate;
     }
 }
