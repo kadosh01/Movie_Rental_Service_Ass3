@@ -1,5 +1,7 @@
 package bgu.spl181.net.impl;
 
+import bgu.spl181.net.api.MessageEncoderDecoder;
+import bgu.spl181.net.impl.echo.LineMessageEncoderDecoder;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 
@@ -50,31 +52,36 @@ public class ServerTestClient {
                 //BufferedReader and BufferedWriter automatically using UTF-8 encoding
                 try {
                     try (Socket sock = new Socket("127.0.0.1", 7777);
-                         BufferedReader in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-                         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()))) {
-                        String line="";
-                        int i=0;
-                        do {
-                            if(!line.contains("BROADCAST")) {
-                                if (i < commands.size()) {
-                                    System.out.println("sending message to server :" + commands.get(i));
-                                    out.write(commands.get(i++));
-                                } else break;
-                                out.newLine();
-                                out.flush();
+                         BufferedInputStream in = new BufferedInputStream(sock.getInputStream());
+                         BufferedOutputStream out = new BufferedOutputStream(sock.getOutputStream())) {
+                        int i = 0;
+                        boolean exit = false;
+                        List<String> lines = new LinkedList<>();
+                        List<String> mes = new LinkedList<>();
+                        MessageEncoderDecoder<String> encdec = new LineMessageEncoderDecoder();
+                        int read;
+                        boolean shouldterm=false;
+                        out.write(encdec.encode(commands.get(i++)));
+                        out.flush();
+                        while (!shouldterm && (read = in.read()) >= 0  ) {
+                            String nextMessage = encdec.decodeNextByte((byte) read);
+                            if (nextMessage != null) {
+                                    System.out.println("message from server: " + nextMessage);
+                                if(nextMessage.contains("SIGNOUT")){shouldterm=true;}
+                                if(!nextMessage.contains("BROADCAST")) {
+                                    lines.add(nextMessage);
+                                    if (i < commands.size()) {
+                                        System.out.println("sending message to server :" + commands.get(i));
+                                        out.write(encdec.encode(commands.get(i++)));
+                                        out.flush();
+                                    }
+                                }
                             }
-
-                            System.out.println("awaiting response");
-                            line = in.readLine();
-                            System.out.println("message from server: " + line);
-                            if(line.contains("BROADCAST")){
-
-                            }
-                        }while(!line.contains("SIGNOUT"));
+                        }
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                        } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
             });
             t.start();

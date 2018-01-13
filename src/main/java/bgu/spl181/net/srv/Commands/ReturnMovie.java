@@ -28,7 +28,7 @@ public class ReturnMovie extends Request{
             _connections.send(_connectionId, err.getError());
             return;
         }
-        user.get_rentedMovies().remove(_movieName);
+        user.get_rentedMovies().remove(new Movie(_movieName,""));
         _database.increaseAvailableCopies(_movieName);
         _database.updateUserFile();
         ACKCommand ack= new ACKCommand("return "+_movieName+" success");

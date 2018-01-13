@@ -78,7 +78,9 @@ public class Movie implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        return _name.equalsIgnoreCase(((Movie)o)._name);
+        String name=_name.toLowerCase();
+        String onmae=((Movie)o)._name.toLowerCase();
+        return name.equals(onmae);
     }
 
     /*

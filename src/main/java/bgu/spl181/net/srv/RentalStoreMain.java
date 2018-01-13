@@ -24,7 +24,7 @@ public class RentalStoreMain {
             DatabaseReadWrite dat= new DatabaseReadWrite();
             dat.DeserializeMovies();
             dat.DeserializeUsers();
-
+/*
 // you can use any server...
             /*
             Server.threadPerClient(
