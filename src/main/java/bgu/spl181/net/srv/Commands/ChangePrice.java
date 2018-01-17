@@ -21,18 +21,18 @@ public class ChangePrice extends Request {
     public void execute() {
         if(!(_database.getUserByConnectionId(_connectionId).get_type().equals("admin")))
         {
-            ERRORCommand error=new ERRORCommand("User is not an administrator");
+            ERRORCommand error=new ERRORCommand("request changeprice failed");
             _connections.send(_connectionId,error.getError());
             return;
         }
         if(!_database.containsMovie(_movieName)){
-            ERRORCommand error=new ERRORCommand("Movie does not exists in the system ");
+            ERRORCommand error=new ERRORCommand("request changeprice failed");
             _connections.send(_connectionId,error.getError());
             return;
         }
         if(Integer.parseInt(_price)<=0)
         {
-            ERRORCommand error=new ERRORCommand("Price is smaller than or equal to 0");
+            ERRORCommand error=new ERRORCommand("request changeprice failed");
             _connections.send(_connectionId,error.getError());
             return;
         }

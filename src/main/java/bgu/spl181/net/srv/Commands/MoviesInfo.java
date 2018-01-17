@@ -22,7 +22,7 @@ public class MoviesInfo extends Request{
         String msg;
         if(_movieName.length()>0){
             if(!_database.containsMovie(_movieName)){
-                ERRORCommand err= new ERRORCommand("movie doesn't exist");
+                ERRORCommand err= new ERRORCommand("request movieinfo failed");
                 _connections.send(_connectionId, err.getError());
                 return;
             }

@@ -20,18 +20,18 @@ public class AddMovie extends Request {
     public void execute() {
         if(!(_database.getUserByConnectionId(_connectionId).get_type().equals("admin")))
         {
-            ERRORCommand error=new ERRORCommand("User is not an administrator");
+            ERRORCommand error=new ERRORCommand("request addmovie failed");
             _connections.send(_connectionId,error.getError());
             return;
         }
         if(_database.containsMovie(_movie.get_name())){
-            ERRORCommand error=new ERRORCommand("Movie already exists in the system ");
+            ERRORCommand error=new ERRORCommand("request addmovie failed");
             _connections.send(_connectionId,error.getError());
             return;
         }
         if(_movie.get_price()<=0 || _movie.get_availableAmount()<=0)
         {
-            ERRORCommand error=new ERRORCommand("Price or Amount are smaller than or equal to 0");
+            ERRORCommand error=new ERRORCommand("request addmovie failed");
             _connections.send(_connectionId,error.getError());
             return;
         }

@@ -265,12 +265,12 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
     protected void Register(String msg) {
         String[] split= msg.split(" ");
         if (_clientLoggedIn) {
-            ERRORCommand err = new ERRORCommand("REGISTER failed, client already logged in");
+            ERRORCommand err = new ERRORCommand("registration failed");
             _connections.send(_connectionId, err.getError());
             return;
         }
         if (split.length < 3) {
-            ERRORCommand err = new ERRORCommand("REGISTER failed, username or password missing");
+            ERRORCommand err = new ERRORCommand("registration failed");
             _connections.send(_connectionId, err.getError());
             return;
         }
@@ -278,13 +278,13 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
         String password = split[2];
 
         if(_database.getUsers().containsKey(username)){
-            ERRORCommand err = new ERRORCommand("REGISTER failed, username already exists");
+            ERRORCommand err = new ERRORCommand("registration failed");
             _connections.send(_connectionId, err.getError());
             return;
         }
 
         if(split.length<4){
-            ERRORCommand err = new ERRORCommand("REGISTER failed, country required");
+            ERRORCommand err = new ERRORCommand("registration failed");
             _connections.send(_connectionId, err.getError());
             return;
         }
@@ -292,7 +292,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
         String country= split2[1].substring(1, split2[1].length()-1);
         Users user= new User(username, "normal", password, country, new LinkedList<>(), 0);
         _database.addUser(user);
-        ACKCommand ack= new ACKCommand("REGISTER succeeded");
+        ACKCommand ack= new ACKCommand("registration succeeded");
         _connections.send(_connectionId, ack.getACK());
 
     }

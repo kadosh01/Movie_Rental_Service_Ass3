@@ -32,12 +32,12 @@ public abstract class UserServiceTextBasedProtocol implements BidiMessagingProto
             }
             case "LOGIN": {
                 if (_clientLoggedIn) {
-                    ERRORCommand err = new ERRORCommand("LOGIN failed, client is already logged in");
+                    ERRORCommand err = new ERRORCommand("login failed");
                     _connections.send(_connectionId, err.getError());
                     return;
                 }
                 if (split.length < 3) {
-                    ERRORCommand err = new ERRORCommand("LOGIN failed, username or password doesn't exist");
+                    ERRORCommand err = new ERRORCommand("login failed");
                     _connections.send(_connectionId, err.getError());
                     return;
                 }
@@ -45,31 +45,31 @@ public abstract class UserServiceTextBasedProtocol implements BidiMessagingProto
                 String password = split[2];
 
                 if (!_database.getUsers().containsKey(username) || !_database.getUsers().get(username).getPassword().equals(password)) {
-                    ERRORCommand err = new ERRORCommand("LOGIN failed, username or password doesn't exist");
+                    ERRORCommand err = new ERRORCommand("login failed");
                     _connections.send(_connectionId, err.getError());
                     return;
                 }
                 if (_database.getUsers().get(username).isLoggedIn()) {
-                    ERRORCommand err = new ERRORCommand("LOGIN failed, user is already logged in");
+                    ERRORCommand err = new ERRORCommand("login failed");
                     _connections.send(_connectionId, err.getError());
                     return;
                 }
                 _clientLoggedIn = true;
                 _database.addLoggedUser(_connectionId, username);
-                ACKCommand ack= new ACKCommand("LOGIN succeeded");
+                ACKCommand ack= new ACKCommand("login succeeded");
                 _connections.send(_connectionId, ack.getACK());
                 break;
             }
             case "SIGNOUT": {
                 if(!_clientLoggedIn){
-                    ERRORCommand err = new ERRORCommand("SIGNOUT failed, client not logged in");
+                    ERRORCommand err = new ERRORCommand("signout failed");
                     _connections.send(_connectionId, err.getError());
                     return;
                 }
                 _clientLoggedIn = false;
                 _database.removeLoggedUser(_connectionId);
                 _shouldTerminate= true;
-                ACKCommand ack= new ACKCommand("SIGNOUT succeeded");
+                ACKCommand ack= new ACKCommand("signout succeeded");
                 _connections.send(_connectionId, ack.getACK());
                 _connections.disconnect(_connectionId); //added disconnect
                 break;
