@@ -21,15 +21,6 @@ public class TPCMain {
                     LineMessageEncoderDecoder::new //message encoder decoder factory
             ).serve();
 
-// you can use any server...
 
-/*
-            Server.reactor(
-                    Runtime.getRuntime().availableProcessors(),
-                    Integer.parseInt(args[0]), //port
-                    () ->  new MovieRentalProtocol(dat), //protocol factory
-                    LineMessageEncoderDecoder::new //message encoder decoder factory
-            ).serve();
-*/
         }
     }

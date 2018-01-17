@@ -80,8 +80,7 @@ public abstract class UserServiceTextBasedProtocol implements BidiMessagingProto
     protected abstract void Register(String msg);
 
     @Override
-    public boolean shouldTerminate() {//when does it change to true??
-         //added disconnect
+    public boolean shouldTerminate() {
         return _shouldTerminate;
     }
 }
