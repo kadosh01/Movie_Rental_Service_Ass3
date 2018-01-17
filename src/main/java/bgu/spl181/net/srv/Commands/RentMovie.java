@@ -18,25 +18,25 @@ public class RentMovie extends Request{
     @Override
     public void execute() {
         if(!_database.containsMovie(_movieName)){//synchronize???
-            ERRORCommand err= new ERRORCommand("movie doesn't exist");
+            ERRORCommand err= new ERRORCommand("request rent failed");
             _connections.send(_connectionId, err.getError());
             return;
         }
         Movie mov= _database.getMovie(_movieName);
         User user= _database.getUserByConnectionId(_connectionId);
         if(user.get_rentedMovies().contains(mov)){//make sure all movies are the same instances
-            ERRORCommand err= new ERRORCommand("user is already renting the movie");
+            ERRORCommand err= new ERRORCommand("request rent failed");
             _connections.send(_connectionId, err.getError());
             return;
         }
         if(user.get_balance()<mov.get_price()){
-            ERRORCommand err= new ERRORCommand("user doesn't have enough money");
+            ERRORCommand err= new ERRORCommand("request rent failed");
             _connections.send(_connectionId, err.getError());
             return;
         }
         for(String country: mov.get_bannedCountries()){
             if(country.equalsIgnoreCase(user.get_country())){
-                ERRORCommand err= new ERRORCommand("movie is banned in user's country");
+                ERRORCommand err= new ERRORCommand("request rent failed");
                 _connections.send(_connectionId, err.getError());
                 return;
             }
@@ -45,14 +45,14 @@ public class RentMovie extends Request{
             user.get_rentedMovies().add(mov);
             user.set_balance(user.get_balance()-mov.get_price());
             _database.updateUserFile();
-            ACKCommand ack= new ACKCommand("rent "+_movieName+" success");
+            ACKCommand ack= new ACKCommand("rent "+'"'+_movieName+'"'+" success");
             _connections.send(_connectionId, ack.getACK());
             BroadcastCommand brd= new BroadcastCommand("movie "+_movieName+" "+_database.getMovie(_movieName).get_availableAmount()+" "+_database.getMovie(_movieName).get_price());
             _connections.broadcast(brd.broadcast());
 
         }
         else{
-            ERRORCommand err= new ERRORCommand("no more copies available");
+            ERRORCommand err= new ERRORCommand("request rent failed");
             _connections.send(_connectionId, err.getError());
             return;
         }

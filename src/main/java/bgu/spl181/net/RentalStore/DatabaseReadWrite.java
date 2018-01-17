@@ -20,8 +20,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class DatabaseReadWrite implements Database{
 
-    private final String MOVIE_PATH="Database/example_Movies.json";
-    private final String USERS_PATH="Database/example_Users.json";
+    private final String MOVIE_PATH="Database/Movies.json";
+    private final String USERS_PATH="Database/Users.json";
     private Gson gson;
     private ConcurrentHashMap<String,Movie> _movies; //<id,Movie>
     private ConcurrentHashMap<String,Users> _users; //<username,User>

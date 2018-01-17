@@ -20,23 +20,23 @@ public class RemMovie extends Request {
     public void execute() {
         if(!(_database.getUserByConnectionId(_connectionId).get_type().equals("admin")))
         {
-            ERRORCommand error=new ERRORCommand("User is not an administrator");
+            ERRORCommand error=new ERRORCommand("request remmovie failed");
             _connections.send(_connectionId,error.getError());
             return;
         }
         if(!_database.containsMovie(_movie)){
-            ERRORCommand error=new ERRORCommand("Movie does not exists in the system ");
+            ERRORCommand error=new ERRORCommand("request remmovie failed");
             _connections.send(_connectionId,error.getError());
             return;
         }
         if(_database.tryToRemove(_movie)) {
-            ACKCommand success = new ACKCommand("REQUEST remmovie '\"'"+_movie+ "'\"' success");
+            ACKCommand success = new ACKCommand("remmovie '\"'"+_movie+ "'\"' success");
             _connections.send(_connectionId,success.getACK());
             BroadcastCommand brd= new BroadcastCommand("movie '\"'"+_movie+"'\"' removed");
             _connections.broadcast(brd.broadcast());
         }
         else{
-            ERRORCommand error=new ERRORCommand("copies of the movie are being currently rented by users");
+            ERRORCommand error=new ERRORCommand("request remmovie failed");
             _connections.send(_connectionId,error.getError());
         }
     }

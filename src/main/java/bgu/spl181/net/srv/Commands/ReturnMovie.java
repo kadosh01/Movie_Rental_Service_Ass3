@@ -17,21 +17,21 @@ public class ReturnMovie extends Request{
     @Override
     public void execute() {
         if(!_database.containsMovie(_movieName)){
-            ERRORCommand err= new ERRORCommand("movie doesn't exist");
+            ERRORCommand err= new ERRORCommand("request return failed");
             _connections.send(_connectionId, err.getError());
             return;
         }
         User user= _database.getUserByConnectionId(_connectionId);
         Movie mov= _database.getMovie(_movieName);
         if(!user.get_rentedMovies().contains(mov)){
-            ERRORCommand err= new ERRORCommand("user is currently not renting the movie");
+            ERRORCommand err= new ERRORCommand("request return failed");
             _connections.send(_connectionId, err.getError());
             return;
         }
         user.get_rentedMovies().remove(new Movie(_movieName,""));
         _database.increaseAvailableCopies(_movieName);
         _database.updateUserFile();
-        ACKCommand ack= new ACKCommand("return "+_movieName+" success");
+        ACKCommand ack= new ACKCommand("return "+'"'+_movieName+'"'+" success");
         _connections.send(_connectionId, ack.getACK());
         BroadcastCommand brd= new BroadcastCommand("movie "+_movieName+" "+_database.getMovie(_movieName).get_availableAmount()+" "+_database.getMovie(_movieName).get_price());
         _connections.broadcast(brd.broadcast());

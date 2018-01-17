@@ -22,7 +22,7 @@ public class MoviesInfo extends Request{
         String msg;
         if(_movieName.length()>0){
             if(!_database.containsMovie(_movieName)){
-                ERRORCommand err= new ERRORCommand("request movieinfo failed");
+                ERRORCommand err= new ERRORCommand("request info failed");
                 _connections.send(_connectionId, err.getError());
                 return;
             }
@@ -33,7 +33,7 @@ public class MoviesInfo extends Request{
             }
         }
         else{
-            msg= _database.getMoviesNames();
+            msg= "info "+_database.getMoviesNames();
         }
         ACKCommand ack= new ACKCommand(msg);
         _connections.send(_connectionId, ack.getACK());

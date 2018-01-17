@@ -3,7 +3,7 @@ package bgu.spl181.net.impl;
 import bgu.spl181.net.api.MessageEncoderDecoder;
 import bgu.spl181.net.api.bidi.BidiMessagingProtocol;
 import bgu.spl181.net.api.bidi.Connections;
-import bgu.spl181.net.srv.RentalStoreMain;
+import bgu.spl181.net.impl.BBreactor.ReactorMain;
 import bgu.spl181.net.impl.BBtpc.TPCMain;
 import bgu.spl181.net.srv.Server;
 import com.google.gson.Gson;
@@ -388,7 +388,7 @@ public class A {
 
         @Override
         public void run(){
-            RentalStoreMain.main(new String[]{this.port});
+            ReactorMain.main(new String[]{this.port});
         }
     }
 

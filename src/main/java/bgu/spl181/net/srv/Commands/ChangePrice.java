@@ -37,7 +37,7 @@ public class ChangePrice extends Request {
             return;
         }
         _database.changePrice(_movieName,Integer.parseInt(_price));
-        ACKCommand success=new ACKCommand("REQUEST changeprice "+_movieName + " success");
+        ACKCommand success=new ACKCommand("changeprice "+_movieName + " success");
         _connections.send(_connectionId,success.getACK());
         BroadcastCommand brd= new BroadcastCommand("movie "+_movieName+" "+_database.getMovies().get(_movieName).get_availableAmount()+" "+_database.getMovies().get(_movieName).get_price());
         _connections.broadcast(brd.broadcast());

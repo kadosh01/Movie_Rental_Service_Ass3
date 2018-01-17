@@ -6,31 +6,14 @@ Client*:
 Client*: Client Message ===> Register
 Client*: Sent 9 bytes to server
 Client*: Client Message ===> Register
-Client*: Sent 9 bytes to server
+Client*: Reply: Response from server
 Client*: Client Message ===> Register
 Client*: Sent 9 bytes to server
 Client*: Client Message ===> Register
- ===> Register
- bytes to server
-Client*: Client Message ===> Register
-Client*: Reply:Client*: 
-from server 21 bytes 
-Client*: Client Message ===> Register
-Client*: 
-Client*: Client Message ===> Register
 Client*: Sent 9 bytes to server
 Client*: Client Message ===> Register
-Client*Client*: Sent 9 bytes to server
-Client*: Client Message ===> Register
-Client*: Sent 9 bytes to server
-Client*: Client Message ===> Register
-egister
-Client*: 
-Client*: Client Message ===> Register
-Client*: Sent 9 bytes to server
-tes to Client*: Client Message ===> Register
-gister
-Client*: Sent 9 bytes to server
+Client*: Reply: Response from seClient*: Client Message ===> Register
+ClienClient*: Sent 9 bytes to server
 Client*: Client Message ===> Register
 Client*: Sent 9 bytes to server
 Client*: Client Message ===> Register
@@ -40,15 +23,76 @@ Client*: Sent 9 bytes to server
 Client*: Client Message ===> Register
 Client*: Sent 9 bytes to server
 Client*: Client Message ===> Register
+Client*: Reply: Response from seClienClient*: Client Message ===> RegiClienClient*: Sent 9 bytes to server
+Client*: Client Message ===> Register
+Client*: Sent 9 bytes to server
+Client*: Client Message ===> Register
+Client*: Reply: Response from server
+Client*: Client Message ===> Register
+Client*: Sent 9 bytes to server
+Client*: Client Message ===> Register
+Client*: Sent 9 bytes to server
+Client*: Client Message ===> Register
+Client*: Reply: Response from server
+Client*: Client Message ===> Register
+Client*: Sent 9 bytes to server
+Client*: Client Message ===> Register
+Client*: Sent 9 bytes to server
+Client*: Client Message ===> Register
+Client*: Reply: Response from server
+Client*: Client Message ===> Register
+Client*: Sent 9 bytes to server
+Client*: Client Message ===> Register
+Client*: Sent 9 bytes to server
+Client*: Client Message ===> Register
+Client*: Reply: Response from server
+Client*: Client Message ===> Register
 Client*: Sent 9 bytes to server
 Client*: Client Message ===> Register
 Client*: Sent 9 bytes to server
 Client*: Client Message ===> Register
 Client*: Sent 9 bytes to server
 Client*: Client Message ===> Register
+Client*: Reply: Response from server
+Client*: Client Message ===> Register
+Client*: Reply: Response from server
+Client*: Client Message ===> Register
 Client*: Sent 9 bytes to server
 Client*: Client Message ===> Register
-: Sent 9 bytes to server
+Client*: Sent 9 bytes to server
 Client*: Client Message ===> Register
 Client*: Sent 9 bytes to server
 Client*: Client Message ===> Register
+Client*: Reply: Response from server
+Client*: Client Message ===> Register
+Client*: Sent 9 bytes to server
+Client*: Client Message ===> Register
+Client*: Sent 9 bytes to server
+ClienClient*: Client Message ===> Register
+Client*: Sent 9 bytes to server
+Client*: Client Message ===> Register
+Client*: Sent 9 bytes to server
+Client*: Client Message ===> Register
+Client*: Reply: Response from server
+Client*: Client Message ===> Register
+Client*: Sent 9 bytes to server
+Client*: Sent 9 bytes to server
+Client*: Test Message ===> Test Ended !!! Waiting for client termination...
+Client*: Sent 9 bytes to server
+Client*: Reply: Response from server
+Client*: Sent 9 bytes to server
+Client*: Sent 9 bytes to server
+Client*: Sent 9 bytes to server
+Client*: Sent 9 bytes to server
+Client*: Reply: Response from server
+Client*: Sent 9 bytes to server
+Client*: Sent 9 bytes to server
+Client*: Sent 9 bytes to server
+Client*: Sent 9 bytes to server
+Client*: Sent 9 bytes to server
+Client*: Sent 9 bytes to server
+Client*: Sent 9 bytes to seClient*: Reply: Response from server
+rver
+Client*: Sent 9 bytes to server
+Client*: Reply: Response from server
+Client*: Reply: Response from server

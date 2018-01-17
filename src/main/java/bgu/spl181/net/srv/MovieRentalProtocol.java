@@ -48,12 +48,12 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
             case "REQUEST":{
                 Request req;
                 if(!_clientLoggedIn){
-                    ERRORCommand err= new ERRORCommand("client isn't logged in");
+                    ERRORCommand err= new ERRORCommand("request "+split.get(1)+" failed");
                     _connections.send(_connectionId, err.getError());
                     return;
                 }
                 if(split.size()<2){
-                    ERRORCommand err= new ERRORCommand("request doesn't exist");
+                    ERRORCommand err= new ERRORCommand("request "+split.get(1)+" failed");
                     _connections.send(_connectionId, err.getError());
                     return;
                 }
@@ -62,7 +62,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                     case "balance":{
                         //String request= split[1]+" "+split[2];
                         if(split.size()<3){
-                            ERRORCommand err= new ERRORCommand("request doesn't exist");
+                            ERRORCommand err= new ERRORCommand("request balance failed");
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
@@ -72,7 +72,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                         }
                         else if(split.get(2).equals("add")){
                             if(split.size()<4){//amount missing
-                                ERRORCommand err= new ERRORCommand("REQUEST failed, amount required");
+                                ERRORCommand err= new ERRORCommand("request addbalance failed");
                                 _connections.send(_connectionId, err.getError());
                                 return;
                             }
@@ -91,7 +91,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                             //movie=movie.substring(0,movie.length()-1);
                             List<String> apSplit= splitString(msg, '\"');
                             if(apSplit.size()>1){
-                                ERRORCommand err= new ERRORCommand("request doesn't exist");
+                                ERRORCommand err= new ERRORCommand("request info failed");
                                 _connections.send(_connectionId, err.getError());
                                 return;
                             }
@@ -107,7 +107,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                     }
                     case "rent":{
                         if(split.size()<3){//movie name missing
-                            ERRORCommand err= new ERRORCommand("REQUEST failed, movie name required");
+                            ERRORCommand err= new ERRORCommand("request rent failed");
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
@@ -116,7 +116,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                             msg+=split.get(i)+" ";
                         List<String> apSplit= splitString(msg, '\"');
                         if(apSplit.size()>1){
-                            ERRORCommand err= new ERRORCommand("REQUEST failed, movie doesn't exist");
+                            ERRORCommand err= new ERRORCommand("request rent failed");
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
@@ -127,7 +127,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                     }
                     case "return":{
                         if(split.size()<3){//movie name missing
-                            ERRORCommand err= new ERRORCommand("REQUEST failed, movie name required");
+                            ERRORCommand err= new ERRORCommand("request return failed");
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
@@ -137,7 +137,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                         //String[] movie= msg.split('"'+"");
                         List<String> apSplit= splitString(msg, '\"');
                         if(apSplit.size()>1){
-                            ERRORCommand err= new ERRORCommand("REQUEST failed, movie doesn't exist");
+                            ERRORCommand err= new ERRORCommand("request return failed");
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
@@ -148,7 +148,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                     }
                     case "addmovie":{
                         if(split.size()<5){
-                            ERRORCommand err= new ERRORCommand("REQUEST failed, information missing");
+                            ERRORCommand err= new ERRORCommand("request addmovie failed");
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
@@ -159,7 +159,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                         //String[] numbers= apSplit[2].split(" ");
                         List<String> numbers= splitString(apSplit.get(2), ' ');
                         if(numbers.size()<2){
-                            ERRORCommand err= new ERRORCommand("REQUEST failed, information missing");
+                            ERRORCommand err= new ERRORCommand("request addmovie failed");
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
@@ -177,7 +177,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                     }
                     case "remmovie":{
                         if(split.size()<3){
-                            ERRORCommand err= new ERRORCommand("request doesn't exist");
+                            ERRORCommand err= new ERRORCommand("request remmovie failed");
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
@@ -188,7 +188,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                         //String movie= apSplit[0];
                         List<String> apSplit= splitString(msg, '\"');
                         if(apSplit.size()>1){
-                            ERRORCommand err= new ERRORCommand("request doesn't exist");
+                            ERRORCommand err= new ERRORCommand("request remmovie failed");
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
@@ -199,7 +199,7 @@ public class MovieRentalProtocol extends UserServiceTextBasedProtocol{
                     }
                     case "changeprice":{
                         if(split.size()<4){
-                            ERRORCommand err= new ERRORCommand("REQUEST failed, information missing");
+                            ERRORCommand err= new ERRORCommand("request changeprice failed");
                             _connections.send(_connectionId, err.getError());
                             return;
                         }
